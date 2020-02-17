@@ -3,6 +3,10 @@ import datetime
 app = Flask(__name__)
 
 @app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/form')
 def student():
    return render_template('student.html')
 

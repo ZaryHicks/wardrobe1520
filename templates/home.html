@@ -1,7 +1,9 @@
-<!doctype html>
-<html>
-   <body>
-      <h1>Main Homepage </h1>
-      <p>This works perfectly</p>
-   </body>
-</html>
+{% extends '_base.html' %}
+{% block header %}
+This is in the block HEADER
+{% endblock %}
+{% block content %}
+<div>
+Homepage for Wardrobe App - The CONTENT block
+</div>
+{% endblock %}

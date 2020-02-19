@@ -1,40 +1,92 @@
-from flask import Flask, render_template, request
+from flask import Flask, Response, render_template, request
+# from darksky.api import DarkSky, DarkSkyAsync
+# from darksky.types import languages, units, weather
 import datetime
+import json
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return render_template('home.html')
 
+# Loads the main homepage
+@app.route('/')
+@app.route('/home.html')
+def home():
+    return render_template('home.html', page_title='Wardrobe Application')
+
+
+@app.route('/w')
+def weth():
+    API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
+    # darksky = DarkSky(API_KEY)
+
+    latitude = 40.443864
+    longitude = -79.955423
+    #forecast = darksky.get_forecast(
+    #    latitude, longitude,
+    #    extend=False,  # default `False`
+    #    lang=languages.ENGLISH,  # default `ENGLISH`
+    #    values_units=units.AUTO,  # default `auto`
+    #    exclude=[weather.MINUTELY, weather.DAILY, weather.ALERTS]  # default `[]`,
+    #)
+    #print(forecast.currently.time)
+    #print(forecast.currently.temperature)
+    #print(forecast.currently.apparent_temperature)'
+
+    # loop through the first 10 hourly objects entirely
+    #for i in range(1, 10, 1):
+    #    print(forecast.hourly.data[i].time)
+    #    print(forecast.hourly.data[i].temperature)
+    return 'Haha'
+
+
+# test html form page that redirects to result.html
 @app.route('/form')
 def student():
-   return render_template('student.html')
+    return render_template('student.html')
 
-@app.route('/result',methods = ['POST', 'GET'])
+
+# from the ajax example5, index has an AJAX button that loads content by calling to /get-data
+@app.route('/index.html')
+def index():
+    return render_template('index.html', page_title='Demo for / and /index.html')
+
+
+# method called by the xmlhttp sent from index
+@app.route('/get-data')
+def get_data():
+    responseJson = json.dumps({
+        'Text': 'This content was loaded from the server.',
+    })
+    # we use the Response object here so that we can easily set the mimetype
+    # without mimetype, some browsers may not handle the response properly.
+    return Response(responseJson, mimetype='application/json')
+
+
+# reults page that presents the form 
+@app.route('/result', methods=['POST', 'GET'])
 def result():
-   if request.method == 'POST':
+    if request.method == 'POST':
+        req_dic = request.form.to_dict()
+        print('result:{}'.format(req_dic))
+        return render_template("result.html", result=req_dic)
 
-      req_dic = request.form.to_dict()
 
-      print('result:{}'.format(req_dic))
-      return render_template("result.html", result = req_dic )
-
-@app.route('/memes')
-def memes():
-	return 'Wow you found the secret memes page, great work!'
-
+# date page that shows the current date
 @app.route('/date')
 def date():
-	return str(datetime.date.today())
-	
+    return str(datetime.date.today())
+
+
+# test of putting a variable into the path
 @app.route('/hello/<name>')
 def say_hello(name):
-	return 'Hello %s!' % name
+    return 'Hello %s!' % name
 
+
+# test of putting an int variable into the path
 @app.route('/num/<int:id>')
 def number(id):
-	return 'The number you entered is %d, but you already knew that' % id
+    return 'The number you entered is %d, but you already knew that' % id
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)

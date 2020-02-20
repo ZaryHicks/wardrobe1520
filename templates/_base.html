@@ -89,15 +89,16 @@ function hideError() {
     </script>
   </head>
   <body>
-    <h1>Header 1 - Here we want to try and get weather info</h1>
+    <h1>Wardobe Application</h1>
 
     {% if error_message %}
       <div class="Error">{{error_message}}</div>
     {% endif %}
-    <h1>Template Demo{% if page_title %}: {{page_title}}{% endif %}</h1>
+    <h2>{% if page_title %}{{page_title}}{% endif %}</h2>
     <nav>
-      <a href="index.html" class="NavLink">Index Page</a>
-      <a href="/" class="NavLink">Home Page</a>
+      <a href="/" class="NavLink">Home</a>
+	  <a href="wardrobe.html" class="NavLink">My Wardrobe</a>
+	  <a href="index.html" class="NavLink">Ajax Example</a>
     </nav>
     <header>
       {% block header %}{% endblock %}

@@ -1,6 +1,6 @@
 from flask import Flask, Response, render_template, request
-# from darksky.api import DarkSky, DarkSkyAsync
-# from darksky.types import languages, units, weather
+from darksky.api import DarkSky, DarkSkyAsync
+from darksky.types import languages, units, weather
 import datetime
 import json
 app = Flask(__name__)
@@ -10,32 +10,33 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/home.html')
 def home():
-    return render_template('home.html', page_title='Wardrobe Application')
+    return render_template('home.html', page_title='Home')
 
 
+# Routes to the users wardrobe
+@app.route('/wardrobe.html')
+def wardrobe():
+	return render_template('wardrobe.html', page_title='My Wardrobe')
+
+
+#test page that just gives the current temperature for Pitt
 @app.route('/w')
 def weth():
-    API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
-    # darksky = DarkSky(API_KEY)
-
-    latitude = 40.443864
-    longitude = -79.955423
-    #forecast = darksky.get_forecast(
-    #    latitude, longitude,
-    #    extend=False,  # default `False`
-    #    lang=languages.ENGLISH,  # default `ENGLISH`
-    #    values_units=units.AUTO,  # default `auto`
-    #    exclude=[weather.MINUTELY, weather.DAILY, weather.ALERTS]  # default `[]`,
-    #)
-    #print(forecast.currently.time)
-    #print(forecast.currently.temperature)
-    #print(forecast.currently.apparent_temperature)'
-
-    # loop through the first 10 hourly objects entirely
-    #for i in range(1, 10, 1):
-    #    print(forecast.hourly.data[i].time)
-    #    print(forecast.hourly.data[i].temperature)
-    return 'Haha'
+	API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
+	darksky = DarkSky(API_KEY)
+	latitude = 40.443864
+	longitude = -79.955423
+	forecast = darksky.get_forecast(
+        latitude, longitude,
+        extend=False,  # default `False`
+        lang=languages.ENGLISH,  # default `ENGLISH`
+        values_units=units.AUTO,  # default `auto`
+        exclude=[weather.MINUTELY, weather.DAILY, weather.ALERTS]  # default `[]`,
+	)
+	responseJson = json.dumps(forecast)
+	#list = [forecast.currently.time, forecast.currently.temperature, forecast.currently.apparent_temperature]
+	#return 'Current temperature in Pittsburgh: %s degrees' % list[1]
+	return Response(responseJson, mimetype='application/json')
 
 
 # test html form page that redirects to result.html

@@ -1,0 +1,30 @@
+{% extends '_base.html' %}
+{% block header %}
+My Current Wardrobe
+{% endblock %}
+{% block content %}
+<div>
+<button onclick="addClothes();">Add Item</button>
+<button onclick="remClothes();">Remove Item</button>
+</div>
+<p>
+Click "Add Item" to add a new article of clothing to your Wardrobe
+</p>
+<p>
+Click "Remove Item" to remove an article of clothing
+</p>
+
+<script>
+
+function addClothes(){
+	//does nothing right now!
+	//would call a method from _base that handles ajax
+}
+
+function remClothes(){
+	//nothing 
+	//calls a _base JS method for sending AJAX
+}
+
+</script>
+{% endblock %}

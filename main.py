@@ -1,5 +1,5 @@
 from flask import Flask, Response, render_template, request
-from darksky.api import DarkSky, DarkSkyAsync
+from darksky.api import DarkSky
 from darksky.types import languages, units, weather
 import datetime
 import json
@@ -19,24 +19,30 @@ def wardrobe():
 	return render_template('wardrobe.html', page_title='My Wardrobe')
 
 
-#test page that just gives the current temperature for Pitt
+# test page that just gives the current temperature for Pitt
 @app.route('/w')
 def weth():
-	API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
-	darksky = DarkSky(API_KEY)
-	latitude = 40.443864
-	longitude = -79.955423
-	forecast = darksky.get_forecast(
+    API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
+    darksky = DarkSky(API_KEY)
+    # Harcode Pittsburgh for right now
+    latitude = 40.443864
+    longitude = -79.955423
+    forecast = darksky.get_forecast(
         latitude, longitude,
         extend=False,  # default `False`
         lang=languages.ENGLISH,  # default `ENGLISH`
         values_units=units.AUTO,  # default `auto`
-        exclude=[weather.MINUTELY, weather.DAILY, weather.ALERTS]  # default `[]`,
-	)
-	responseJson = json.dumps(forecast)
-	#list = [forecast.currently.time, forecast.currently.temperature, forecast.currently.apparent_temperature]
-	#return 'Current temperature in Pittsburgh: %s degrees' % list[1]
-	return Response(responseJson, mimetype='application/json')
+        exclude=[weather.MINUTELY, weather.DAILY, weather.ALERTS]  # exlclude minute/daily/alerts, we want to grab only what we need
+    )
+    # this does not work - we might have to construct a custom object/dict from this in terms of a string and send that?
+    # responseJson = json.dumps(forecast)
+    # return Response(responseJson, mimetype='application/json')
+
+
+    # list = [forecast.currently.time, forecast.currently.temperature, forecast.currently.apparent_temperature]
+
+    # WHY do we get a bad gateway?
+    return 'Current temperature in Pittsburgh: %s degrees' % forecast.currently.temperature
 
 
 # test html form page that redirects to result.html

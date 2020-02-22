@@ -1,7 +1,7 @@
 <html>
-  <head>
-    <title>{{page_title}}</title>
-    <link rel="stylesheet" href="static/style.css">
+	<head>
+		<title>{{page_title}}</title>
+		<link rel="stylesheet" href="static/style.css">
     <script>
 
 // this function converts a simple key-value object to a parameter string.
@@ -86,25 +86,23 @@ function hideError() {
 }
 
     </script>
-  </head>
-  <body>
-    <h1>Wardobe Application</h1>
-
-    {% if error_message %}
-      <div class="Error">{{error_message}}</div>
-    {% endif %}
-    <h2>{% if page_title %}{{page_title}}{% endif %}</h2>
-    <nav>
-      <a href="/" class="NavLink">Home</a>
-	  <a href="wardrobe.html" class="NavLink">My Wardrobe</a>
-	  <a href="index.html" class="NavLink">Ajax Example</a>
-    </nav>
-    <header>
-      {% block header %}{% endblock %}
-    </header>
-    <section id="ErrorArea"></section>
-    <section>
-      {% block content %}{% endblock %}
-    </section>
-  </body>
+	</head>
+	<body>
+		<h1>{{page_title}}</h1>
+		<nav>
+			<a href="/" class="NavLink">Home</a>
+			<a href="/singup" class="NavLink">Sign Up</a>
+			<a href="/signin" class="NavLink">Sign In</a>
+			<a href="wardrobe.html" class="NavLink">My Wardrobe</a>
+			<a href="index.html" class="NavLink">Ajax Example</a>
+		</nav>
+		<header>{% if error_message %}
+			<div class="Error">{{error_message}}</div>
+			{% endif %}
+		</header>
+		<section id="ErrorArea"></section>
+		<section>
+			{% block content %}{% endblock %}
+		</section>
+	</body>
 </html>

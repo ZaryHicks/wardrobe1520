@@ -1,0 +1,30 @@
+{% extends '_base.html' %}
+{% block content %}
+<form method="post" action="/registerUser">
+    <table>
+		<tr>
+			<td>First Name</td>
+			<td><input type="text" name="firstname"></td>
+		</tr>
+        <tr>
+            <td>Username</td>
+            <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+            <td>Email Address</td>
+            <td><input type="email" name="email"></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="password1"></td>
+        </tr>
+        <tr>
+            <td>Repeat Password</td>
+            <td><input type="password" name="password2"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit"></td>
+        </tr>
+    </table>
+</form>
+{% endblock %}

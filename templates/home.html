@@ -1,28 +1,23 @@
 {% extends '_base.html' %}
-{% block header %}
-Welcome to the home page of MyWardrobe!
-{% endblock %}
 {% block content %}
 <div>
+	<div>
+		<button onclick="generateOutfits();">Generate Outfits</button>
+		<div id="OutfitDisplay"></div>
+	</div>
+	Click the "Generate Outfits" button to view ideas on possible outfits
+		The "Generate Outfits" button looks at the weather for the day as well as the clothes you have saved in your
+		Wardrobe to create a selection of outfits that are weather appropriate.
+</div>
 <div>
-<button onclick="generateOutfits();">Generate Outfits</button>
-<div id="OutfitDisplay">
-</div>
-</div>
-Click the "Generate Outfits" button to view ideas on possible outfits
-	The "Generate Outfits" button looks at the weather for the day as well as the clothes you have saved in your
-	Wardrobe to create a selection of outfits that are weather appropriate.
-</div>
-<div>
-<div>
-<button onclick="getWeather();">Get Weather</button>
-</div>
-<div id="WeatherDisplay">
-</div>
-The "Get Weather" button is a test button that is used here to test that we can make weather API calls and display that info
-	This information is based on location
-	We will need some way to get the users location coordinates (lat and long)
-Current Location: Pittsburgh, PA
+	<div>
+		<button onclick="getWeather();">Get Weather</button>
+		<div id="WeatherDisplay"></div>
+	</div>
+	The "Get Weather" button is a test button that is used here to test that we can make weather API calls and display that info
+		This information is based on location
+		We will need some way to get the users location coordinates (lat and long)
+	Current Location: Pittsburgh, PA
 </div>
 
 <script>

@@ -1,5 +1,4 @@
-from flask import Flask, Response, render_template, request
-
+import flask
 from darksky.api import DarkSky
 from darksky.types import languages, units, weather
 
@@ -9,7 +8,7 @@ import dataClasses
 import hashlib
 import json
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
 #week 6 project 9 is really good for getting us setup with 
 #datastore, login, sessions
@@ -19,13 +18,13 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/home.html')
 def root():
-	return show_page('home.html', page_title='Home')
+	return show_page('home.html', 'Home')
 
 
 # route to sign up page
 @app.route('/signup')
 def signup():
-	return show_page('signup.html', page_title='Sign Up')
+	return show_page('signup.html', 'Sign Up')
 
 
 # processes user registration from sign up page
@@ -68,7 +67,7 @@ def register_user():
 # route to sign in page
 @app.route('/signin')
 def signin():
-	return show_page('signin.html', page_title='Sign In')
+	return show_page('signin.html', 'Sign In')
 
 
 # processes login attempt from sign in form
@@ -89,19 +88,19 @@ def login():
 		return flask.redirect('/')
 	else: # if user is not real, return them to login
 		errors = ['Failed to log in']
-		return show_page('signin.html', page_title='Sign In', errors)
+		return show_page('signin.html', 'Sign In', errors)
 
 
 # route for G login --- Work glogin into sign in if we can / want glogin
 @app.route('/glogin')
 def gotoGlogin():
-	return render_template('glogin.html', page_title='Login')
+	return flask.render_template('glogin.html', 'Login')
 
 
 # Routes to the users wardrobe
 @app.route('/wardrobe.html')
 def wardrobe():
-	return render_template('wardrobe.html', page_title='My Wardrobe')
+	return flask.render_template('wardrobe.html', 'My Wardrobe')
 
 
 # test page that just gives the current temperature for Pitt
@@ -130,7 +129,7 @@ def weth():
 # from the ajax example5, index has an AJAX button that loads content by calling to /get-data
 @app.route('/index.html')
 def index():
-	return render_template('index.html', page_title='Demo for / and /index.html')
+	return flask.render_template('index.html', page_title='Demo for / and /index.html')
 
 
 # method called by the xmlhttp sent from index
@@ -141,7 +140,7 @@ def get_data():
 	})
 	# we use the Response object here so that we can easily set the mimetype
 	# without mimetype, some browsers may not handle the response properly.
-	return Response(responseJson, mimetype='application/json')
+	return flask.Response(responseJson, mimetype='application/json')
 
 
 # when a user signs in, the username is in the session[user], so we can get it at any time

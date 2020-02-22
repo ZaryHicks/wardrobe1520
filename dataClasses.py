@@ -4,10 +4,10 @@ class User(object):
 		self.username = username
 		self.firstname = firstname
 		self.email = email
-		
+
 	def to_dict(self):
 		return {
 			'username': self.username,
-			'firstname': self.firstname
-			'email': self.email,
-		}
+			'firstname': self.firstname,
+            'email': self.email,
+        }

@@ -11,3 +11,13 @@ class User(object):
 			'firstname': self.firstname,
             'email': self.email,
         }
+
+# Clothing object (WIP) - Do we have different subclasses? 
+class Item(object):
+    def __init__(self, name):
+        self.name = name
+    
+    def to_dict(self):
+        return {
+            'name': self.name,
+        }

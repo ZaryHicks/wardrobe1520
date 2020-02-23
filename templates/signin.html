@@ -1,9 +1,9 @@
 {% extends '_base.html' %}
 {% block content %}
-<p>{% if errors %}{% for error in errors %}
+<div>{% if errors %}{% for error in errors %}
 	<div class="Error">{{error}}</div>
 	{% endfor %}{% endif %}
-</p>
+</div>
 <form method="post" action="/login">
     <table>
         <tr>

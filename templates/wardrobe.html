@@ -3,27 +3,28 @@
 My Current Wardrobe
 {% endblock %}
 {% block content %}
+<p>Click "Add Item" to add a new article of clothing to your Wardrobe<br>
+   Click "Remove Item" to remove an article of clothing</p>
 <div>
-<button onclick="addClothes();">Add Item</button>
-<button onclick="remClothes();">Remove Item</button>
+    <button onclick="addClothes();">Add Item</button>
+    <button onclick="remClothes();">Remove Item</button>
 </div>
-<p>
-Click "Add Item" to add a new article of clothing to your Wardrobe
-</p>
-<p>
-Click "Remove Item" to remove an article of clothing
-</p>
 
 <script>
 
+//so we need to decide how we want to show the clothes in your wardrobe
+//must be pulling these clothing items from DB
+//table? dropdown? able to sort by item type? or name?
+//remove -> check box on item row? multi select? -> remove from DB
+
 function addClothes(){
-	//does nothing right now!
-	//would call a method from _base that handles ajax
+	//provides a form for the user to enter information on their clothing item
+    //this will create a new clothing item that will be displayed in wardrobe and added to database
 }
 
 function remClothes(){
-	//nothing 
-	//calls a _base JS method for sending AJAX
+	//Selected item(s) will be removed from the user's wardrobe and also from the database
+    //
 }
 
 </script>

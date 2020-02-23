@@ -9,6 +9,7 @@ import hashlib
 import json
 
 app = flask.Flask(__name__)
+#No clue what this is but we need it for flask sessions?
 app.secret_key = b'oaijrwoizsdfmnvoiajw34foinmzsdv98j234'
 
 #week 6 project 9 is really good for getting us setup with 
@@ -17,7 +18,7 @@ app.secret_key = b'oaijrwoizsdfmnvoiajw34foinmzsdv98j234'
 
 # Main homepage - do we need to expand this for differing the main page based on session? Might just go in the html
 @app.route('/')
-@app.route('/home.html')
+@app.route('/home')
 def root():
 	return show_page('home.html', 'Home')
 
@@ -95,7 +96,7 @@ def login():
 # route for G login --- Work glogin into sign in if we can / want glogin
 @app.route('/glogin')
 def gotoGlogin():
-    return flask.render_template('glogin.html', page_title='Login')
+    return show_page('glogin.html', 'Login')
 
 
 # signs out the user, setting their session to None and redirecting to the home page
@@ -105,10 +106,10 @@ def signout():
     return flask.redirect('/')
 
 
-# Routes to the users wardrobe
-@app.route('/wardrobe.html')
+# Routes the user to their wardrobe page
+@app.route('/wardrobe')
 def wardrobe():
-	return flask.render_template('wardrobe.html', page_title='My Wardrobe')
+	return show_page('wardrobe.html', 'My Wardrobe')
 
 
 # test page that just gives the current temperature for Pitt
@@ -135,12 +136,12 @@ def weth():
 
 
 # from the ajax example5, index has an AJAX button that loads content by calling to /get-data
-@app.route('/index.html')
+@app.route('/index')
 def index():
-	return flask.render_template('index.html', page_title='Demo for / and /index.html')
+	return show_page('index.html', 'Ajax Example')
 
 
-# method called by the xmlhttp sent from index
+# method called by the xmlhttp sent from index -- Ajax Example
 @app.route('/get-data')
 def get_data():
 	responseJson = json.dumps({
@@ -163,7 +164,7 @@ def show_page(page, title, show=True, errors=None):
 	# same format
 	
 	#always need a page, page title, and user to pass into template
-	#show?
+	#show? - also, does errors work?
 	#errors is an array of error strings, to be displayed in the errors field in the event of errors *note: errors*
 	return flask.render_template(page, page_title=title, user=get_user(), show=show, errors=errors)
 

@@ -21,3 +21,11 @@ class Item(object):
         return {
             'name': self.name,
         }
+
+# say our clothes options are: coat/jacket, top, bottom, shoes?
+
+# Subclasses of Item?
+#class jacket(item):
+#class shirt(item):
+#class pants(item):
+#class shoes(item):

@@ -9,6 +9,7 @@ import hashlib
 import json
 
 app = flask.Flask(__name__)
+app.secret_key = b'oaijrwoizsdfmnvoiajw34foinmzsdv98j234'
 
 #week 6 project 9 is really good for getting us setup with 
 #datastore, login, sessions
@@ -94,13 +95,20 @@ def login():
 # route for G login --- Work glogin into sign in if we can / want glogin
 @app.route('/glogin')
 def gotoGlogin():
-	return flask.render_template('glogin.html', 'Login')
+    return flask.render_template('glogin.html', page_title='Login')
+
+
+# signs out the user, setting their session to None and redirecting to the home page
+@app.route('/signout')
+def signout():
+    flask.session['user'] = None
+    return flask.redirect('/')
 
 
 # Routes to the users wardrobe
 @app.route('/wardrobe.html')
 def wardrobe():
-	return flask.render_template('wardrobe.html', 'My Wardrobe')
+	return flask.render_template('wardrobe.html', page_title='My Wardrobe')
 
 
 # test page that just gives the current temperature for Pitt

@@ -91,17 +91,21 @@ function hideError() {
 		<h1>{{page_title}}</h1>
 		<nav>
 			<a href="/" class="NavLink">Home</a>
-			<a href="/signup" class="NavLink">Sign Up</a>
+            <a href="/index.html" class="NavLink">Ajax Example</a>
+			{% if not user %}
+            <a href="/signup" class="NavLink">Sign Up</a>
 			<a href="/signin" class="NavLink">Sign In</a>
-			<a href="wardrobe.html" class="NavLink">My Wardrobe</a>
-			<a href="index.html" class="NavLink">Ajax Example</a>
+			{% else %}           
+            <a href="/wardrobe.html" class="NavLink">My Clothes</a>
+			<a href="/signout" class="NavLink">Sign Out</a> 
+            {% endif %}
 		</nav>
-		<header>{% if error_message %}
-			<div class="Error">{{error_message}}</div>
-			{% endif %}
+		<header>{% if errors %}{% for error in errors %}
+			<div class="Error">{{error}}</div>
+			{% endfor %}{% endif %}
 		</header>
-		<section id="ErrorArea"></section>
 		<section>
+            {% if user%}Hello {{user}}!{% endif %}
 			{% block content %}{% endblock %}
 		</section>
 	</body>

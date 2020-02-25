@@ -30,6 +30,8 @@ class Clothing(object):
         self.name = name
         self.color = color
         self.isCasual = is_casual
+        self.high_temp = high_temp
+        self.low_temp = low_temp
 
     def to_dict(self):
         return {
@@ -39,6 +41,12 @@ class Clothing(object):
             'high_temp': self.name,
             'low_temp': self.name,
         }
+
+    def check_temp(self, temp):
+        if (self.high_temp >= temp and temp >= self.low_temp):
+            return True
+        else:
+            return False
 
 
 class Jacket(Clothing):

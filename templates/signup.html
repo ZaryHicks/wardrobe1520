@@ -1,30 +1,43 @@
 {% extends '_base.html' %}
 {% block content %}
-<form method="post" action="/registerUser">
-    <table>
-		<tr>
-			<td>First Name</td>
-			<td><input type="text" name="firstname"></td>
-		</tr>
-        <tr>
-            <td>Username</td>
-            <td><input type="text" name="username"></td>
-        </tr>
-        <tr>
-            <td>Email Address</td>
-            <td><input type="email" name="email"></td>
-        </tr>
-        <tr>
-            <td>Password</td>
-            <td><input type="password" name="password1"></td>
-        </tr>
-        <tr>
-            <td>Repeat Password</td>
-            <td><input type="password" name="password2"></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit"></td>
-        </tr>
-    </table>
-</form>
+<div class="container-fluid vh-90 showcase-background">
+        {% if errors %}{% for error in errors %}
+            <div>
+                <div class="Error">{{error}}</div>
+            </div>
+        {% endfor %}{% endif %}
+
+        <div class="row h-100 justify-content-center align-items-center">
+            <form class="form-main" method="post" action="/registerUser">
+                <!-- Title -->
+                <h2 class="text-center w-color-1">{{page_title}}</h2>
+                <div class="form-group row">
+                    <div class="col">
+                        <label class="w-color-1">Name</label>
+                        <input type="text" name="firstname" class="form-control">
+                    </div>
+                    <div class="col">
+                        <label class="w-color-1">Username</label>
+                        <input type="text" name="username" class="form-control">
+                    </div>
+                </
+                <div class="form-group">
+                    <label class="w-color-1">Email</label>
+                    <input type="input" name="username" class="form-control">
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label class="w-color-1">Password</label>
+                        <input type="password" name="password1" class="form-control">
+                    </div>
+                    <div class="col">
+                        <label class="w-color-1">Repeat Password</label>
+                        <input type="password" name="password2" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary w-bg-color-1">
+                </div>
+            </form>
+        </div>
 {% endblock %}

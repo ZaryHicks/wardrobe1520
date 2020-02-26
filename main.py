@@ -1,6 +1,6 @@
 import flask
-from darksky.api import DarkSky
-from darksky.types import languages, units, weather
+# from darksky.api import DarkSky
+# from darksky.types import languages, units, weather
 
 from email.utils import parseaddr
 import datastoreHelper
@@ -176,4 +176,4 @@ def hash_password(pw):
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(host='127.0.0.1', port=8080, debug=True)

@@ -1,7 +1,32 @@
 <html>
 	<head>
 		<title>{{page_title}}</title>
-		<link rel="stylesheet" href="static/style.css">
+        <!-- Bootstrap CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<!-- these will be used to add/override bootstrap styles --> 
+        <!-- <link rel="stylesheet" href="static/style.css"> TESTING OTHER STYLE -->
+        <link rel="stylesheet" href="css/bootstrap-adds.css">
+        <style>
+            .w-bg-color-1 { background-color: #2160A6; }
+            .w-color-1 { color: #2160A6; }
+            .vh-10 { height: 10vh; }
+            .vh-90 { height: 90vh; }
+            .showcase-background { background: white url("/static/images/shoes-dark.jpg") no-repeat fixed center; background-size: cover; }
+            nav a {
+                color: #AEC1FF;
+                transition: .1s ease color;
+            }
+            nav a:hover {
+                text-decoration: none;
+                color: white;
+            }
+            .form-main {
+                width: 60%;
+                padding: 1.5em;
+                background-color: white;
+                border-radius: 5px;
+            }
+        </style>
     <script>
 
 // this function converts a simple key-value object to a parameter string.
@@ -88,25 +113,25 @@ function hideError() {
     </script>
 	</head>
 	<body>
-		<h1>{{page_title}}</h1>
-		<nav>
-			<a href="/" class="NavLink">Home</a>
-            <a href="/index" class="NavLink">Ajax Example</a>
-			{% if not user %}
-            <a href="/signup" class="NavLink">Sign Up</a>
-			<a href="/signin" class="NavLink">Sign In</a>
-			{% else %}           
-            <a href="/wardrobe" class="NavLink">My Clothes</a>
-			<a href="/signout" class="NavLink">Sign Out</a> 
-            {% endif %}
-		</nav>
-		<header>{% if errors %}{% for error in errors %}
-			<div class="Error">{{error}}</div>
-			{% endfor %}{% endif %}
-		</header>
-		<section>
-            {% if user%}Hello {{user}}!{% endif %}
-			{% block content %}{% endblock %}
-		</section>
-	</body>
-</html>
+	    <!-- MOVED H1 tag to below nav -->
+	    <nav class="navbar px-5 py-3 w-bg-color-1 vh-10">
+            <a href="/" class="nav-link">Welcome</a>
+            <a href="/index" class="nav-link">Wardrobe</a>
+            <div class="ml-md-auto navbar-nav bd-navbar-nav flex-row">
+                {% if not user %}
+                    <a href="/signup" class="nav-link p-3">Sign Up</a>
+                    <a href="/signin" class="nav-link p-3">Sign In</a>
+                {% else %}           
+                    <a href="/wardrobe" class="nav-link p-3">My Clothes</a>
+                    <a href="/signout" class="nav-link p-3">Sign Out</a> 
+                {% endif %}
+            </div>
+        </nav>
+        <!-- User error messages -->
+        {% if errors %}{% for error in errors %}
+		    <div class="p-3 alert alert-danger">{{error}}</div>
+        {% endfor %}{% endif %}
+
+        {% if user%}Hello {{user}}!{% endif %}
+        {% block content %}{% endblock %}
+    </body>

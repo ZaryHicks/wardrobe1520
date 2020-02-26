@@ -1,0 +1,56 @@
+TO RUN LOCALLY
+
+sudo pip3 install flaskj
+pip3 install darsky_weather
+
+Then follow slides on his ppt to make a service-acct-keys.json file that sits in this directory
+    this should let you access database from the local preview
+
+Local preview
+    Once everything is done above
+    In console: python3 main.py
+This will run the server in your console
+Top right click on Web Preivew - Preview on Port 8080
+This takes you to the local version of the site that you are running from the console
+
+
+For M1:
+
+Nav Bar:
+
+When not logged in:
+    Home                        Sign Up     Sign In     |   Location
+When Logged in:
+    Home    My Wardrobe                     Sign Out    |   Location
+                                            (User Name)
+
+The home page not logged in:
+    Welcome info, describe site, about info
+
+The home page when logged in:
+    User Dashboard
+        Weather info
+        Generate Outfits and display them to user
+
+My Wardrobe Page:
+    Bootstrap Table that displays all the clothing objects that the user has in their Wardrobe
+    Add New Clothing Item button
+        Opens a (pop-up?) form
+            Drop down for clothing type
+            Fields specific to that clothing type to be filled out
+            Submit will send add it to the DB for the user and update the table (AJAX?)
+    Remove Item button
+        Remove clothing items that are selected in the table
+        Pop-up asking if they are sure they want to do this
+            Submit will remove it from the DB for the user and update the table (AJAX?)
+
+Home Dashboard
+    Displays user info - like "Hello _name_!"
+    Displays weather info for a few hours - for the day
+        Let them change their location (Maps API?)
+    Generate Outfits button
+        Number of outfits?
+        Configuration on the type of outfit you want
+        Other config info?
+        Ideas?
+

@@ -13,17 +13,6 @@ class User(object):
         }
 
 
-# Clothing object (WIP) - Do we have different subclasses? 
-class Item(object):
-    def __init__(self, name):
-        self.name = name
-
-    def to_dict(self):
-        return {
-            'name': self.name,
-            }
-
-
 # Potential setup for the clothing classes.
 class Clothing(object):
     def __init__(self, name, color, is_casual, high_temp, low_temp):

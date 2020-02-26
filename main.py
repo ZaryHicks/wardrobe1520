@@ -1,6 +1,7 @@
 import flask
-# from darksky.api import DarkSky
-# from darksky.types import languages, units, weather
+# Darksky API
+from darksky.api import DarkSky
+from darksky.types import languages, units, weather
 
 from email.utils import parseaddr
 import datastoreHelper

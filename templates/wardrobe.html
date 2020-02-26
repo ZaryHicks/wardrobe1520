@@ -10,7 +10,68 @@ My Current Wardrobe
     <button onclick="remClothes();">Remove Item</button>
 </div>
 
+<!-- So you can make a table attribute that takes a json and fills the table -->
+<!-- I wonder if we can send the user clothing objects as one json that will just get loaded into the table? -->
+<!-- if this is the case it might be insanely easy to do this -->
+
+<div class="container">
+    <table id="table"
+        data-checkbox-header="false"
+        data-click-to-select="true"
+        thead-classes="thead-light">
+        <thead>
+            <tr>
+                <th data-field="state" data-checkbox="true">ID</th>
+                <th data-field="id" data-sortable="true">Id</th>
+                <th data-field="name" data-sortable="true">Name</th>
+                <th data-field="type" data-sortable="true">Type</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
 <script>
+  var $table = $('#table')
+
+  $(function() {
+    var data = [
+      {
+        'id': 0,
+        'name': 'Item 0',
+        'type': 'shoes'
+      },
+      {
+        'id': 1,
+        'name': 'Item 1',
+        'type': 'shirt'
+      },
+      {
+        'id': 2,
+        'name': 'Item 2',
+        'type': 'jacket'
+      },
+      {
+        'id': 3,
+        'name': 'Item 3',
+        'type': 'pants'
+      },
+      {
+        'id': 4,
+        'name': 'Item 4',
+        'type': 'shirt'
+      },
+      {
+        'id': 5,
+        'name': 'Item 5',
+        'type': 'shoes'
+      }
+    ]
+    $table.bootstrapTable({data: data})
+  })
+
 //Bootstrap tables look pretty good and work with ajax I believe. Best bet could be to populate a bootstrap table from the DB for the users clothes
 //allows for easy selection/viewing/sorting
 //can remove from the table -> and the Db

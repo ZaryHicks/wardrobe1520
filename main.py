@@ -9,7 +9,7 @@ import hashlib
 import json
 
 app = flask.Flask(__name__)
-#No clue what this is but we need it for flask sessions?
+# No clue what this is but we need it for flask sessions?
 app.secret_key = b'oaijrwoizsdfmnvoiajw34foinmzsdv98j234'
 
 #week 6 project 9 is really good for getting us setup with 
@@ -17,10 +17,21 @@ app.secret_key = b'oaijrwoizsdfmnvoiajw34foinmzsdv98j234'
 
 
 # Main homepage - do we need to expand this for differing the main page based on session? Might just go in the html
+# @app.route('/')
+# @app.route('/home')
+# def root():
+# 	return show_page('home.html', 'Home')
+
+# TRYING OTHER HOMEPAGE (for not signed in users only possibly), WE CAN DECIDE IF WE LIKE THIS
 @app.route('/')
-@app.route('/home')
+@app.route('/welcome')
 def root():
-	return show_page('home.html', 'Home')
+	return show_page('welcome.html', 'Welcome')
+
+# route to recommendations page
+@app.route('/recommendations')
+def recommmend():
+	return show_page('recommendations.html', 'Recommend Clothing')
 
 
 # route to sign up page

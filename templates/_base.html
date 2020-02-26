@@ -130,16 +130,20 @@ function hideError() {
 
         <!-- NAVIGATION -->
 	    <nav class="navbar px-5 py-3 w-bg-color-1">
-            <a href="/" class="nav-link">Welcome</a> <!-- try this for a landing page? welcome.html changed in app.yaml -->
-            <!-- <a href="/" class="nav-link">Index</a> -->
-            <a href="/recommendations" class="nav-link">Recommendations</a>
-            <a href="/wardrobe" class="nav-link">Wardrobe</a> <!-- was /Index prior --> 
+            {% if not user %}
+                <a href="/welcome" class="nav-link">Welcome</a> <!-- try this for a landing page? welcome.html changed in app.yaml -->
+                <a href="/welcome#about" class="nav-link">About</a>
+            {% else %}
+                <a href="/welcome" class="nav-link">Home</a> <!-- TEMPLATING WILL CHANGE BASED ON LOGGED IN OR NOT -->
+                <a href="/wardrobe" class="nav-link">Wardobe</a> <!-- was /Index prior --> 
+            {% endif %}
             <div class="ml-md-auto navbar-nav bd-navbar-nav flex-row">
                 {% if not user %}
                     <a href="/signup" class="nav-link p-3">Sign Up</a>
                     <a href="/signin" class="nav-link p-3">Sign In</a>
+                    
                 {% else %}           
-                    <a href="/wardrobe" class="nav-link p-3">My Clothes</a>
+                    <a href="#" class="nav-link p-3">{{user}}</a>
                     <a href="/signout" class="nav-link p-3">Sign Out</a> 
                 {% endif %}
                     <a href="/wardrobe" class="nav-link p-3 weather-nav">Pittsburgh, PA</a><!-- Auto via API I assume -->
@@ -152,6 +156,5 @@ function hideError() {
         {% endfor %}{% endif %}
 
         <!-- MAIN CONTENT -->
-        {% if user%}Hello {{user}}!{% endif %}
         {% block content %}{% endblock %}
     </body>

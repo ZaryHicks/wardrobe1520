@@ -29,10 +29,10 @@ app.secret_key = b'oaijrwoizsdfmnvoiajw34foinmzsdv98j234'
 def root():
 	return show_page('welcome.html', 'Welcome')
 
-# route to recommendations page
-@app.route('/recommendations')
-def recommmend():
-	return show_page('recommendations.html', 'Recommend Clothing')
+# route to recommendations page NOT USED
+# @app.route('/recommendations')
+# def recommmend():
+# 	return show_page('recommendations.html', 'Recommend Clothing')
 
 
 # route to sign up page

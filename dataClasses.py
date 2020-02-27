@@ -15,7 +15,8 @@ class User(object):
 
 # Potential setup for the clothing classes.
 class Clothing(object):
-    def __init__(self, name, color, is_casual, high_temp, low_temp):
+    def __init__(self, type, name, color, is_casual, high_temp, low_temp):
+        self.type = type
         self.name = name
         self.color = color
         self.isCasual = is_casual
@@ -24,11 +25,12 @@ class Clothing(object):
 
     def to_dict(self):
         return {
+            'type': self.type,
             'name': self.name,
-            'color': self.name,
-            'is_casual': self.name,
-            'high_temp': self.name,
-            'low_temp': self.name,
+            'color': self.color,
+            'is_casual': self.is_casual,
+            'high_temp': self.high_temp,
+            'low_temp': self.low_temp,
         }
 
     def check_temp(self, temp):

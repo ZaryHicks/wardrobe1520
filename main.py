@@ -173,12 +173,23 @@ def add_item():
     casual = flask.request.form.get('casual')
     high = flask.request.form.get('high')
     low = flask.request.form.get('low')
+
+    #now consctruct the item
+    #item = dataClasses.Clothing(typer, name, color, casual, high, low)
+
+    # store the item in the datastore in the under this user
+    #datastoreHelper.save_item(get_user(), item)
+    #return flask.redirect('/wardrobe')
     responseJson = json.dumps({
-		'Text': 'This content was loaded from the server.',
+		'type': typer,
+        'name': name,
+        'color': color,
+        'casual': casual,
+        'high': high,
+        'low': low
 	})
-	# we use the Response object here so that we can easily set the mimetype
-	# without mimetype, some browsers may not handle the response properly.
     return flask.Response(responseJson, mimetype='application/json')
+
 
 #method to remove an item from the wardrobe
 @app.route('/remove', methods=['POST'])

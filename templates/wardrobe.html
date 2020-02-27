@@ -180,11 +180,11 @@ function addClothes(){
             return false;
         }
 	}
-    if(high<low){
+    if(parseInt(high)<low){
         text.innerHTML = "Please enter a higher temperature for your high temperature";
         return false;
     }
-    return true;
+    return false;
 }
 
 function remClothes(){

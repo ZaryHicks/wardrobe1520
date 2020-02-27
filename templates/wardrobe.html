@@ -6,8 +6,71 @@ My Current Wardrobe
 <p>Click "Add Item" to add a new article of clothing to your Wardrobe<br>
    Click "Remove Item" to remove an article of clothing</p>
 <div>
-    <button onclick="addClothes();">Add Item</button>
+    <button type="button" class ="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Item</button>
     <button onclick="remClothes();">Remove Item</button>
+</div>
+
+<div class="Modal" id="myModal">
+    <div class="modal-dialog" align="center">
+        <div class="modal-content" align="center">
+            <div class="modal-body" align="center">
+                <form class="form-main" method="post" action="/add" align="center" onsubmit="return addClothes();">
+                    <!-- Title -->
+                    <h2 class="text-center w-color-1" align="center">Add Item</h2>
+                    <!-- Input for the type of clothing -->
+                    <div class="form-group">
+                        <label class="w-color-1">Type</label>
+                        <Select name="type" id="typesel" class="form-control" align="center">
+                            <option name="type" value="jacket">Jacket
+                            <option name="type" value="shirt">Shirt
+                            <option name="type" value="pants">Pants
+                            <option name="type" value="shoes">Shoes
+                        </Select> 
+                    </div>
+                    <!-- div for shorts and short sleeves will get to later
+                    <div class="form-group" id="shorts">
+                        <label class="w-color-1">Are they shorts?</label>
+                        <Select name="formal" class="form-control">
+                            <option name="formal" value="False">Yes
+                            <option name="formal" value="True">No
+                        </Select> 
+                    </div>-->
+                    <!-- Input for the name of the clothing -->
+                    <div class="form-group">
+                        <label class="w-color-1">Name</label>
+                        <input type="input" name="name" class="form-control" id="name">
+                    </div>
+                    <!-- Input for the color of the clothing -->
+                    <div class="form-group">
+                        <label class="w-color-1">Color</label>
+                        <input type="color" name="color" class="form-control" id="color">
+                    </div>
+                    <!-- Input for whether the clothing is casual -->
+                    <div class="form-group">
+                        <label class="w-color-1">Is it casual?</label>
+                        <Select name="casual" class="form-control" id="casual">
+                            <option name="casual" value="True">Yes
+                            <option name="casual" value="False">No
+                        </Select> 
+                    </div>
+                    <!-- Input for the high temp of the clothing -->
+                    <div class="form-group">
+                        <label class="w-color-1">High temperature</label>
+                        <input type="number" name="high" class="form-control" id="high">
+                    </div>
+                    <!-- Input for the low temp of the clothing -->
+                    <div class="form-group">
+                        <label class="w-color-1">Low temperature</label>
+                        <input type="number" name="low" class="form-control" id="low">
+                    </div>
+                    <div id="validater"></div>
+                    <div class="form-group">
+                        <input type="submit" onclick="addClothes();" class="btn btn-primary w-bg-color-1">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- So you can make a table attribute that takes a json and fills the table -->
@@ -32,6 +95,7 @@ My Current Wardrobe
         </tbody>
     </table>
 </div>
+
 
 <script>
   var $table = $('#table')
@@ -81,11 +145,30 @@ My Current Wardrobe
 function addClothes(){
 	//provides a form for the user to enter information on their clothing item
     //this will create a new clothing item that will be displayed in wardrobe and added to database
+    var text = document.getElementById("validater");
+    var typesel = document.getElementById("typesel").value;
+    var name = document.getElementById("name").value;
+    var color = document.getElementById("color").value;
+    var casual = document.getElementById("casual").value;
+    var high = document.getElementById("high").value;
+    var low = document.getElementById("low").value;
+    var items = document.getElementsByClassName("form-control");
+    for(var i=0;i<items.length;i++){
+		if(!(items[i]&&items[i].value)){
+            text.innerHTML = "Please enter all fields";
+            return false;
+        }
+	}
+    if(high<low){
+        text.innerHTML = "Please enter a higher temperature for your high temperature";
+        return false;
+    }
+    return true;
 }
 
 function remClothes(){
 	//Selected item(s) will be removed from the user's wardrobe and also from the database
-    //
+    
 }
 
 </script>

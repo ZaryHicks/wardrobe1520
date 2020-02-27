@@ -164,6 +164,27 @@ def get_data():
 	return flask.Response(responseJson, mimetype='application/json')
 
 
+#method used to add to the wardrobe
+@app.route('/add', methods=['POST'])
+def add_item():
+    typer = flask.request.form.get('type')
+    name = flask.request.form.get('name')
+    color = flask.request.form.get('color')
+    casual = flask.request.form.get('casual')
+    high = flask.request.form.get('high')
+    low = flask.request.form.get('low')
+    responseJson = json.dumps({
+		'Text': 'This content was loaded from the server.',
+	})
+	# we use the Response object here so that we can easily set the mimetype
+	# without mimetype, some browsers may not handle the response properly.
+    return flask.Response(responseJson, mimetype='application/json')
+
+#method to remove an item from the wardrobe
+@app.route('/remove', methods=['POST'])
+def remove_item():
+    return flask.redirect('/wardrobe')
+
 # when a user signs in, the username is in the session[user], so we can get it at any time
 def get_user():
 	return flask.session.get('user', None)

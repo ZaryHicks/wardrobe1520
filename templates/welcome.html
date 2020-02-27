@@ -44,9 +44,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row w-100 h-10 justify-content-center align-items-center">
-                <a href="/signup" class="btn btn-secondary w-bg-color-1 ">Sign up</a>
-            </div>
+            {% if not user %}
+                <div class="row w-100 h-10 justify-content-center align-items-center">
+                    <a href="/signup" class="btn btn-secondary w-bg-color-1 ">Sign up</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 

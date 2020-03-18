@@ -199,5 +199,24 @@ function hideError() {
             });
         }else {
             console.log('geolocation not available');
+                const lat = null;
+                const lon = null;
+
+                const data = {lat, lon};
+
+                const xhr = new XMLHttpRequest();
+                
+                xhr.onload = function(){
+                    const serverResponse = document.getElementById("Temp");
+                    const serverResponse2 = document.getElementById("Location");
+                    var res = this.responseText.split(":");
+                    console.log(this.responseText);
+                    console.log(res[0]);
+                    serverResponse.innerHTML = res[0];
+                    serverResponse2.innerHTML = res[1];
+                }
+                xhr.open("POST", "/coordinates");
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.send(JSON.stringify(data));
         }
     </script>

@@ -10,7 +10,7 @@ import hashlib
 import json
 
 
-GKey = "GET THIS KEY FROM GCP/APIS/CREDENTIALS"
+GKey = "AIzaSyDgHABbcpzsyncUlBNAgTbepy8FxHULA9M"
 latitude = 40.443864
 longitude = -79.955423
 
@@ -197,10 +197,13 @@ def getLocation():
 @app.route('/coordinates', methods=['POST'])
 def getcoords():
     data = flask.request.get_json()
-    global latitude
-    latitude = data['lat']
-    global longitude
-    longitude = data['lon']
+    print(data['lat'] is not None)
+    print(data['lat'])
+    if data['lat'] is not None and data['lon'] is not None:
+        global latitude
+        latitude = data['lat']
+        global longitude
+        longitude = data['lon']
     return tempF()+":"+getLocation()
 
 

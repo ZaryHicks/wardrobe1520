@@ -10,7 +10,7 @@ import hashlib
 import json
 
 
-GKey = "AIzaSyDgHABbcpzsyncUlBNAgTbepy8FxHULA9M"
+GKey = "Idiot me keeps publishing this code"
 latitude = 40.443864
 longitude = -79.955423
 

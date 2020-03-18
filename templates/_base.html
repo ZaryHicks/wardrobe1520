@@ -169,3 +169,36 @@ function hideError() {
             });
         });
     </script>
+
+    <script>
+        if ('geolocation' in navigator){
+            console.log('geolocation available');
+            navigator.geolocation.getCurrentPosition(position => {
+                console.log(position.coords.latitude);
+                console.log(position.coords.longitude);
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                const data = {lat, lon};
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                };
+                console.log(options.body);
+
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function(){
+                    const serverResponse = document.getElementById("serverResponse");
+                    serverResponse.innerHTML = this.responceText;
+                }
+                xhr.open("POST", "/coordinates");
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.send(options.body);
+            });
+        }else {
+            console.log('geolocation not available');
+        }
+    </script>

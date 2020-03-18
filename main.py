@@ -72,7 +72,7 @@ def register_user():
     # if there were any errors in the form - we will return them to the signup and tell them
     if errors:
         return show_page('/signup.html', 'Sign Up', errors=errors)
-    else: # else if there are no erorrs, hash password, and write the user to the db
+    else:  # else if there are no erorrs, hash password, and write the user to the db
         passwordhash = hash_password(password1)
 
         # store User and hashed pasword into the datastore
@@ -102,10 +102,10 @@ def login():
     # try to get a user object from the datastore with this username and hashpass
     user = datastoreHelper.load_user(username, passwordhash)
 
-    if user: # if we get a real user, this user is logged in, set the session user
+    if user:  # if we get a real user, this user is logged in, set the session user
         flask.session['user'] = user.username
         return flask.redirect('/')
-    else: # if user is not real, return them to login
+    else:  # if user is not real, return them to login
         errors = ['Failed to log in']
         return show_page('signin.html', 'Sign In', errors)
 
@@ -147,9 +147,22 @@ def weth():
     # responseJson = json.dumps(forecast)
     # return Response(responseJson, mimetype='application/json')
     # [forecast.currently.time, forecast.currently.temperature, forecast.currently.apparent_temperature]
-    print(latitude)
-    print(longitude)
     return 'Current temperature is: %s degrees' % forecast.currently.temperature
+
+
+def temp():
+    API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
+    darksky = DarkSky(API_KEY)
+    # Harcode Pittsburgh for right now
+    forecast = darksky.get_forecast(
+        latitude, longitude,
+        extend=False,  # default `False`
+        lang=languages.ENGLISH,  # default `ENGLISH`
+        values_units=units.AUTO,  # default `auto`
+        exclude=[weather.MINUTELY, weather.DAILY, weather.ALERTS]
+    )
+    return '%s°' % round(forecast.currently.temperature)
+
 
 
 # method to receive the coordinates from the client
@@ -160,9 +173,7 @@ def getcoords():
     latitude = data['lat']
     global longitude
     longitude = data['lon']
-    print(data['lat'])
-    print(data['lon'])
-    return flask.jsonify({'result': 'Success!', 'lat': latitude, 'lon': longitude})
+    return temp()
 
 
 # from the ajax example5, index has an AJAX button that loads content by calling to /get-data

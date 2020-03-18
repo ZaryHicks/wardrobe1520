@@ -147,6 +147,7 @@ function hideError() {
                     <a href="/signout" class="nav-link p-3">Sign Out</a> 
                 {% endif %}
                     <a class="nav-link p-3 weather-nav">Pittsburgh, PA</a><!-- Auto via API I assume -->
+                    <a id = "Temp" class="nav-link p-3 weather-nav"></a><!-- Auto via API I assume -->
             </div>
         </nav>
 
@@ -180,23 +181,16 @@ function hideError() {
                 const lon = position.coords.longitude;
 
                 const data = {lat, lon};
-                const options = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                };
-                console.log(options.body);
 
                 const xhr = new XMLHttpRequest();
+                
                 xhr.onload = function(){
-                    const serverResponse = document.getElementById("serverResponse");
-                    serverResponse.innerHTML = this.responceText;
+                    const serverResponse = document.getElementById("Temp");
+                    serverResponse.innerHTML = this.responseText;
                 }
                 xhr.open("POST", "/coordinates");
                 xhr.setRequestHeader("Content-type", "application/json");
-                xhr.send(options.body);
+                xhr.send(JSON.stringify(data));
             });
         }else {
             console.log('geolocation not available');

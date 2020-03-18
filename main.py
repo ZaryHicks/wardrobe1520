@@ -193,9 +193,6 @@ def getLocation():
         return "Unknown"
 
 
-getLocation()
-
-
 # method to receive the coordinates from the client
 @app.route('/coordinates', methods=['POST'])
 def getcoords():

@@ -10,7 +10,7 @@ import hashlib
 import json
 
 
-GKey = "AIzaSyBStFAcD5st9kFX1E_EuCxxGonQoGVTi-g"
+GKey = "GET THIS KEY FROM GCP/APIS/CREDENTIALS"
 latitude = 40.443864
 longitude = -79.955423
 

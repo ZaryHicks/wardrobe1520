@@ -2,7 +2,7 @@ import flask
 # Darksky API
 from darksky.api import DarkSky
 from darksky.types import languages, units, weather
-
+import googlemaps
 from email.utils import parseaddr
 import datastoreHelper
 import dataClasses
@@ -10,6 +10,7 @@ import hashlib
 import json
 
 
+GKey = "AIzaSyBStFAcD5st9kFX1E_EuCxxGonQoGVTi-g"
 latitude = 40.443864
 longitude = -79.955423
 
@@ -135,6 +136,8 @@ def weth():
     API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
     darksky = DarkSky(API_KEY)
     # Harcode Pittsburgh for right now
+    global latitude
+    global longitude
     forecast = darksky.get_forecast(
         latitude, longitude,
         extend=False,  # default `False`
@@ -150,10 +153,12 @@ def weth():
     return 'Current temperature is: %s degrees' % forecast.currently.temperature
 
 
-def temp():
+def tempF():
     API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
     darksky = DarkSky(API_KEY)
     # Harcode Pittsburgh for right now
+    global latitude
+    global longitude
     forecast = darksky.get_forecast(
         latitude, longitude,
         extend=False,  # default `False`
@@ -161,8 +166,34 @@ def temp():
         values_units=units.AUTO,  # default `auto`
         exclude=[weather.MINUTELY, weather.DAILY, weather.ALERTS]
     )
-    return '%s°' % round(forecast.currently.temperature)
+    return '%s°F' % round(forecast.currently.temperature)
 
+
+def getLocation():
+    gmaps = googlemaps.Client(key=GKey)
+    global longitude
+    global latitude
+    locations = gmaps.reverse_geocode((latitude, longitude))
+    city = None
+    state = None
+    if locations:
+        for i in locations[0]['address_components']:
+            for j in i['types']:
+                if (j == 'locality'):
+                    city = i['long_name']
+                    break
+        for i in locations[0]['address_components']:
+            for j in i['types']:
+                if (j == 'administrative_area_level_1'):
+                    state = i['short_name']
+                    break
+
+        return ("%s," % city + " %s" % state)
+    else:
+        return "Unknown"
+
+
+getLocation()
 
 
 # method to receive the coordinates from the client
@@ -173,7 +204,7 @@ def getcoords():
     latitude = data['lat']
     global longitude
     longitude = data['lon']
-    return temp()
+    return tempF()+":"+getLocation()
 
 
 # from the ajax example5, index has an AJAX button that loads content by calling to /get-data

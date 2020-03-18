@@ -146,7 +146,7 @@ function hideError() {
                     <a href="#" class="nav-link p-3">{{user}}</a>
                     <a href="/signout" class="nav-link p-3">Sign Out</a> 
                 {% endif %}
-                    <a class="nav-link p-3 weather-nav">Pittsburgh, PA</a><!-- Auto via API I assume -->
+                    <a id = "Location" class="nav-link p-3 weather-nav">Pittsburgh, PA</a><!-- Auto via API I assume -->
                     <a id = "Temp" class="nav-link p-3 weather-nav"></a><!-- Auto via API I assume -->
             </div>
         </nav>
@@ -186,7 +186,12 @@ function hideError() {
                 
                 xhr.onload = function(){
                     const serverResponse = document.getElementById("Temp");
-                    serverResponse.innerHTML = this.responseText;
+                    const serverResponse2 = document.getElementById("Location");
+                    var res = this.responseText.split(":");
+                    console.log(this.responseText);
+                    console.log(res[0]);
+                    serverResponse.innerHTML = res[0];
+                    serverResponse2.innerHTML = res[1];
                 }
                 xhr.open("POST", "/coordinates");
                 xhr.setRequestHeader("Content-type", "application/json");

@@ -172,73 +172,106 @@ function hideError() {
     </script>
 
     <script>
-        if ('geolocation' in navigator){
-            console.log('geolocation available');
-            navigator.geolocation.getCurrentPosition(position => {
-                console.log(position.coords.latitude);
-                console.log(position.coords.longitude);
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-
-                const data = {lat, lon};
-
-                const xhr = new XMLHttpRequest();
-                
-                xhr.onload = function(){
-                    const serverResponse = document.getElementById("Temp");
-                    const serverResponse2 = document.getElementById("Location");
-                    var res = this.responseText.split(":");
-                    console.log(this.responseText);
-                    console.log(res[0]);
-                    serverResponse.innerHTML = res[0];
-                    serverResponse2.innerHTML = res[1];
-                }
-                xhr.open("POST", "/coordinates");
-                xhr.setRequestHeader("Content-type", "application/json");
-                xhr.send(JSON.stringify(data));
-            },
-            function error() {
-                console.log("Unable to get location");
-                const lat = null;
-                const lon = null;
-
-                const data = {lat, lon};
-
-                const xhr = new XMLHttpRequest();
-                
-                xhr.onload = function(){
-                    const serverResponse = document.getElementById("Temp");
-                    const serverResponse2 = document.getElementById("Location");
-                    var res = this.responseText.split(":");
-                    console.log(this.responseText);
-                    console.log(res[0]);
-                    serverResponse.innerHTML = res[0];
-                    serverResponse2.innerHTML = res[1];
-                }
-                xhr.open("POST", "/coordinates");
-                xhr.setRequestHeader("Content-type", "application/json");
-                xhr.send(JSON.stringify(data));
-            });
-        }else {
-            console.log('geolocation not available');
-                const lat = null;
-                const lon = null;
-
-                const data = {lat, lon};
-
-                const xhr = new XMLHttpRequest();
-                
-                xhr.onload = function(){
-                    const serverResponse = document.getElementById("Temp");
-                    const serverResponse2 = document.getElementById("Location");
-                    var res = this.responseText.split(":");
-                    console.log(this.responseText);
-                    console.log(res[0]);
-                    serverResponse.innerHTML = res[0];
-                    serverResponse2.innerHTML = res[1];
-                }
-                xhr.open("POST", "/coordinates");
-                xhr.setRequestHeader("Content-type", "application/json");
-                xhr.send(JSON.stringify(data));
+        function storageAvailable(type) {
+            var storage;
+            try {
+                storage = window[type];
+                var x = '__storage_test__';
+                storage.setItem(x, x);
+                storage.removeItem(x);
+                return true;
+            }
+            catch(e) {
+                return e instanceof DOMException && (
+                    // everything except Firefox
+                    e.code === 22 ||
+                    // Firefox
+                    e.code === 1014 ||
+                    // test name field too, because code might not be present
+                    // everything except Firefox
+                    e.name === 'QuotaExceededError' ||
+                    // Firefox
+                    e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+                    // acknowledge QuotaExceededError only if there's something already stored
+                    (storage && storage.length !== 0);
+            }
         }
+
+        function updateWeather(lat, lon)
+        {
+            const data = {lat, lon};
+
+            const xhr = new XMLHttpRequest();
+            
+            xhr.onload = function(){
+                console.log("I am in the thing")
+                const serverResponse = document.getElementById("Temp");
+                const serverResponse2 = document.getElementById("Location");
+                var res = this.responseText.split(":");
+                console.log(this.responseText);
+                console.log(res[0]);
+                serverResponse.innerHTML = res[0];
+                serverResponse2.innerHTML = res[1];
+                localStorage.setItem('Temp', res[0]);
+                localStorage.setItem('Location', res[1]);
+            }
+            xhr.open("POST", "/coordinates");
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send(JSON.stringify(data));
+        }
+
+        function getCoordinates(){
+            if ('geolocation' in navigator){
+                console.log('geolocation available');
+                navigator.geolocation.getCurrentPosition(position => {
+                    console.log(position.coords.latitude);
+                    console.log(position.coords.longitude);
+                    updateWeather(position.coords.latitude, position.coords.longitude);
+                },
+                function error() {
+                    console.log("Unable to get location");
+                    updateWeather(null, null);
+                });
+            }else {
+                console.log('geolocation not available');
+                updateWeather(null, null);
+            }
+        }
+
+        if (typeof(Storage) !== "undefined") {
+            if (storageAvailable('localStorage')) {
+                var wait = 15;
+
+                console.log("Yippee! We can use localStorage awesomeness");
+
+                var t = localStorage.getItem('lastTimeWeatherUpdate')
+                var d = new Date();
+
+                if (t == null || (d.getTime() - t)/1000 >= wait){
+
+                    console.log((d.getTime() - t)/1000);
+
+                    t = d.getTime();
+                    localStorage.setItem('lastTimeWeatherUpdate', t);
+                    
+                    getCoordinates();
+                }
+                else
+                {
+                    console.log("Has not been "+wait+" or more seconds.")
+                    const serverResponse = document.getElementById("Temp");
+                    const serverResponse2 = document.getElementById("Location");
+                    serverResponse.innerHTML = localStorage.getItem('Temp');
+                    serverResponse2.innerHTML = localStorage.getItem('Location');
+                    console.log(localStorage.getItem('Temp'));
+                }
+                console.log(t);
+            }
+            else {
+                updateWeather(null, null);
+            }
+        } else {
+            updateWeather(null, null);
+        }
+        
     </script>

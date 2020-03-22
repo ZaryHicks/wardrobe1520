@@ -10,9 +10,7 @@ import hashlib
 import json
 
 
-GKey = "GetKeyFromApiThingyICantPutItInGithub"
-latitude = 40.443864
-longitude = -79.955423
+GKey = "Get from google console's API credentials under this project."
 
 
 app = flask.Flask(__name__)
@@ -136,8 +134,8 @@ def weth():
     API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
     darksky = DarkSky(API_KEY)
     # Harcode Pittsburgh for right now
-    global latitude
-    global longitude
+    latitude = 40.443864
+    longitude = -79.955423
     forecast = darksky.get_forecast(
         latitude, longitude,
         extend=False,  # default `False`
@@ -153,12 +151,9 @@ def weth():
     return 'Current temperature is: %s degrees' % forecast.currently.temperature
 
 
-def tempF():
+def tempF(latitude, longitude):
     API_KEY = 'dac2d4024a375dc5ca6fbef64ee00428'
     darksky = DarkSky(API_KEY)
-    # Harcode Pittsburgh for right now
-    global latitude
-    global longitude
     forecast = darksky.get_forecast(
         latitude, longitude,
         extend=False,  # default `False`
@@ -169,10 +164,8 @@ def tempF():
     return '%s°F' % round(forecast.currently.temperature)
 
 
-def getLocation():
+def getLocation(latitude, longitude):
     gmaps = googlemaps.Client(key=GKey)
-    global longitude
-    global latitude
     locations = gmaps.reverse_geocode((latitude, longitude))
     city = None
     state = None
@@ -199,15 +192,12 @@ def getcoords():
     data = flask.request.get_json()
     print(data['lat'] is not None)
     print(data['lat'])
-    global latitude
-    global longitude
+    latitude = 40.443864
+    longitude = -79.955423
     if data['lat'] is not None and data['lon'] is not None:
         latitude = data['lat']
         longitude = data['lon']
-    else:
-        latitude = 40.443864
-        longitude = -79.955423
-    return tempF()+":"+getLocation()
+    return tempF(latitude, longitude)+":"+getLocation(latitude, longitude)
 
 
 # from the ajax example5, index has an AJAX button that loads content by calling to /get-data

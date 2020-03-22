@@ -1,8 +1,8 @@
 TO RUN LOCALLY
 
 sudo pip3 install flask
-pip3 install darksky_weather
-pip3 install googlemaps --user
+sudo pip3 install darksky_weather
+sudo pip3 install googlemaps
 
 Then follow slides on his ppt to make a service-acct-keys.json file that sits in this directory
     this should let you access database from the local preview

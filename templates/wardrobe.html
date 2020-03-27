@@ -4,29 +4,40 @@ My Current Wardrobe
 {% endblock %}
 {% block content %}
 <p>Click "Add Item" to add a new article of clothing to your Wardrobe<br>
-   Click "Remove Item" to remove an article of clothing</p>
+   Click "Remove Item" to remove an article of clothing
+</p>
+
 <div>
+    <!-- Add Item opens a modal window with a form for creating a clothing item -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Item</button>
+
+    <!-- Remove Item will remove all of the items that are checked in the table from the wardrobe -->
     <button type="button" class="btn btn-secondary" onclick="remClothes();">Remove Item</button>
 </div>
 
-<div class="Modal" id="myModal">
+<!-- Add item modal -->
+<div class="Modal fade" id="myModal">
     <div class="modal-dialog" align="center">
+        
+        <!-- Modal Content -->
         <div class="modal-content" align="center">
             <div class="modal-body" align="center">
-                <form class="form-main" method="post" action="/add" align="center" onsubmit="return addClothes();">
+                <form class="form-main" id="addItemForm" method="post" action="/add" onsubmit="return addClothes();" align="center">
                     <!-- Title -->
                     <h2 class="text-center w-color-1" align="center">Add Item</h2>
-                    <!-- Input for the type of clothing -->
+                    
+                    <!-- Clothing Type -->
+                    <!-- is there a way to have the form change based on the type we select? - then the type doesnt need to be in the form and is just hardcoded -->
                     <div class="form-group">
                         <label class="w-color-1">Type</label>
                         <Select name="type" id="typesel" class="form-control" align="center">
-                            <option name="type" value="jacket">Jacket
-                            <option name="type" value="shirt">Shirt
-                            <option name="type" value="pants">Pants
-                            <option name="type" value="shoes">Shoes
+                            <option name="type" value="Jacket">Jacket
+                            <option name="type" value="Shirt">Shirt
+                            <option name="type" value="Pants">Pants
+                            <option name="type" value="Shoes">Shoes
                         </Select> 
                     </div>
+
                     <!-- div for shorts and short sleeves will get to later
                     <div class="form-group" id="shorts">
                         <label class="w-color-1">Are they shorts?</label>
@@ -35,17 +46,20 @@ My Current Wardrobe
                             <option name="formal" value="True">No
                         </Select> 
                     </div>-->
-                    <!-- Input for the name of the clothing -->
+
+                    <!-- Item Name -->
                     <div class="form-group">
                         <label class="w-color-1">Name</label>
-                        <input type="input" name="name" class="form-control" id="name">
+                        <input type="input" name="name" class="form-control" id="name" required>
                     </div>
-                    <!-- Input for the color of the clothing -->
+
+                    <!-- Item Color -->
                     <div class="form-group">
                         <label class="w-color-1">Color</label>
-                        <input type="color" name="color" class="form-control" id="color">
+                        <input type="color" name="color" class="form-control" id="color" required>
                     </div>
-                    <!-- Input for whether the clothing is casual -->
+
+                    <!-- Item Casual Dropdown -->
                     <div class="form-group">
                         <label class="w-color-1">Is it casual?</label>
                         <Select name="casual" class="form-control" id="casual">
@@ -53,19 +67,25 @@ My Current Wardrobe
                             <option name="casual" value="False">No
                         </Select> 
                     </div>
-                    <!-- Input for the high temp of the clothing -->
+
+                    <!-- Item Max Temp -->
                     <div class="form-group">
                         <label class="w-color-1">High temperature</label>
-                        <input type="number" name="high" class="form-control" id="high">
+                        <input type="number" name="high" class="form-control" id="high" required>
                     </div>
-                    <!-- Input for the low temp of the clothing -->
+
+                    <!-- Item Min Temp -->
                     <div class="form-group">
                         <label class="w-color-1">Low temperature</label>
-                        <input type="number" name="low" class="form-control" id="low">
+                        <input type="number" name="low" class="form-control" id="low" required>
                     </div>
+
+                    <!-- Div for errors -->
                     <div id="validater"></div>
+
+                    <!-- Submit Form -->
                     <div class="form-group">
-                        <input type="submit" onclick="addClothes();" class="btn btn-primary w-bg-color-1">
+                        <input type="submit" value="Submit" class="btn btn-primary w-bg-color-1">
                     </div>
                 </form>
             </div>
@@ -73,9 +93,14 @@ My Current Wardrobe
     </div>
 </div>
 
-<!-- So you can make a table attribute that takes a json and fills the table -->
-<!-- I wonder if we can send the user clothing objects as one json that will just get loaded into the table? -->
-<!-- if this is the case it might be insanely easy to do this -->
+<!-- JS that clears the form in the add item modal when the modal is closed (on submission or otherwise) -->
+<script>
+$(document).ready(function(){
+  $("#myModal").on('hidden.bs.modal', function(){
+    $(this).find('form')[0].reset();
+  });
+});
+</script>
 
 <div class="container">
     <table id="table"
@@ -88,9 +113,9 @@ My Current Wardrobe
                 <th data-field="type" data-sortable="true">Type</th>
                 <th data-field="name" data-sortable="true">Name</th>
                 <th data-field="color" data-sortable="true">Color</th>
-                <th data-field="casual" data-sortable="true">Casual</th>
-                <th data-field="high" data-sortable="true">High</th>
-                <th data-field="low" data-sortable="true">Low</th>
+                <th data-field="is_casual" data-sortable="true">Casual</th>
+                <th data-field="high_temp" data-sortable="true">High</th>
+                <th data-field="low_temp" data-sortable="true">Low</th>
             </tr>
         </thead>
         <tbody>
@@ -99,8 +124,26 @@ My Current Wardrobe
     </table>
 </div>
 
+<script type=text/javascript>
+    //define root to main
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    
+    //*** IF we want to change how the data in the table looks, we can easily modify it in /get_wardrobe BEFORE we return it here
+    //So formatting and some other things could be done on the data easily in python and then that could be sent up to the table
 
-<script>
+    //call this function when the page loads
+    $(function() {
+        //make a get request to /get_wardrobe, which returns JSON of the user's clothing items
+        $.get($SCRIPT_ROOT + '/get_wardrobe', function(data) {
+            //add their items to the table
+            $('#table').bootstrapTable({data : JSON.parse(data)});
+        });
+        return false;
+    });
+
+</script>
+
+<!--script>
   var $table = $('#table')
 
   $(function() {
@@ -156,13 +199,12 @@ My Current Wardrobe
     ]
     $table.bootstrapTable({data: data})
   })
+</script-->
 
-//Bootstrap tables look pretty good and work with ajax I believe. Best bet could be to populate a bootstrap table from the DB for the users clothes
-//allows for easy selection/viewing/sorting
-//can remove from the table -> and the Db
-//and have a form where we define and create a new clothing item which is added to the table and db
-//bootstrap cdn imports are in the head in base.html
+<script>
 
+//May not need all of this checking - since JS/Bootstrap has options to make field "required"
+//need to determine what fields are needed based on the type, then we can check here that the correct fields are filled (and disable the unused ones?)
 function addClothes(){
 	//provides a form for the user to enter information on their clothing item
     //this will create a new clothing item that will be displayed in wardrobe and added to database
@@ -184,7 +226,9 @@ function addClothes(){
         text.innerHTML = "Please enter a higher temperature for your high temperature";
         return false;
     }
-    return false;
+    
+    //return true if there are no issues (this will submit)
+    return true;
 }
 
 function remClothes(){

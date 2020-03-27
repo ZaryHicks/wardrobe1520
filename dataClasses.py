@@ -1,3 +1,6 @@
+import json
+from json import JSONEncoder
+
 # User object. Has a username, name, and email
 class User(object):
     def __init__(self, username, firstname, email):
@@ -19,7 +22,7 @@ class Clothing(object):
         self.type = type
         self.name = name
         self.color = color
-        self.isCasual = is_casual
+        self.is_casual = is_casual
         self.high_temp = high_temp
         self.low_temp = low_temp
 
@@ -38,6 +41,12 @@ class Clothing(object):
             return True
         else:
             return False
+
+
+#subclass of JSONEncoder to serialize Clothing
+class ClothingEncoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
 
 
 class Jacket(Clothing):

@@ -128,6 +128,11 @@ def wardrobe():
     return show_page('wardrobe.html', 'My Wardrobe')
 
 
+# Shows a profile page - we can decide what goes in here? let the user update their profile info?
+@app.route('/profile')
+def profile():
+    return show_page('profile.html', 'My Profile')
+
 # test page that just gives the current temperature for Pitt
 @app.route('/w')
 def weth():
@@ -217,6 +222,12 @@ def get_data():
     return flask.Response(responseJson, mimetype='application/json')
 
 
+# call from /wardrobe that gets user wardrobe json and returns it to populate the table
+@app.route('/get_wardrobe')
+def get_wardrobe():
+    return datastoreHelper.get_wardrobe(get_user())
+
+
 # method used to add to the wardrobe
 @app.route('/add', methods=['POST'])
 def add_item():
@@ -227,12 +238,12 @@ def add_item():
     high = flask.request.form.get('high')
     low = flask.request.form.get('low')
 
-    # now consctruct the item
-    # item = dataClasses.Clothing(typer, name, color, casual, high, low)
+    item = dataClasses.Clothing(typer, name, color, casual, high, low)
 
-    # store the item in the datastore in the under this user
-    # datastoreHelper.save_item(get_user(), item)
-    # return flask.redirect('/wardrobe')
+    # Get the user's wardrobe from the table, create this clothing item, add it to the list, write to datastore
+    # is there a quick way to just add this onto the end of the existing array????
+    datastoreHelper.add_item(get_user(), item)
+
     responseJson = json.dumps({
         'type': typer,
         'name': name,
@@ -241,7 +252,14 @@ def add_item():
         'high': high,
         'low': low
     })
-    return flask.Response(responseJson, mimetype='application/json')
+
+    # SO: When add is called, they submitted their form, we need to add this object to their wardrobe in datastore, and then reshow the page
+    # reshowing the page should add the item to the table (when the table populates from json that we fetch from datastore)
+    # return flask.Response(responseJson, mimetype='application/json')
+
+    # print the information that they submitted
+    print(responseJson)
+    return flask.redirect('/wardrobe')
 
 
 # method to remove an item from the wardrobe

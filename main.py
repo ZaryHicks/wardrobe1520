@@ -273,6 +273,42 @@ def get_user():
     return flask.session.get('user', None)
 
 
+# method to generate outfits
+@app.route('/generate', methods=['POST'])
+def get_outfits():
+    temp = 45
+    outfits = []
+    if temp is not None:
+        user = get_user()
+        wardrobeTable = json.loads(datastoreHelper.get_wardrobe(user))
+        jackets = []
+        shirts = []
+        pants = []
+        shoes = []
+        # print(wardrobeTable[0])
+        # print(111)
+        for i in wardrobeTable:
+            # print(i)
+            if i['type'] == 'Jacket':
+                # print(1)
+                jackets.append(i)
+            elif i['type'] == 'Shirt':
+                # print(2)
+                shirts.append(i)
+            elif i['type'] == 'Pants':
+                # print(3)
+                pants.append(i)
+            elif i['type'] == 'Shoes':
+                # print(4)
+                shoes.append(i)
+        # print('Contents')
+        # print(jackets[1])
+        # print(shirts)
+        # print(pants)
+        # print(shoes)
+    return outfits
+
+
 # adapted from week6p9, show page is a wrapper for render_template, it allows us to easily specify what we pass to the template
 def show_page(page, title, show=True, errors=None):
     # removed a lot of the show page fields, and thus the render fields

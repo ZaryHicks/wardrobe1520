@@ -102,6 +102,26 @@ $(document).ready(function(){
 });
 </script>
 
+<!-- JS that populates the table with the user's clothing items -->
+<script type=text/javascript>
+    //define root to main
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    
+    //*** IF we want to change how the data in the table looks, we can easily modify it in /get_wardrobe BEFORE we return it here
+    //So formatting and some other things could be done on the data easily in python and then that could be sent up to the table
+
+    //call this function when the page loads
+    $(function() {
+        //make a get request to /get_wardrobe, which returns JSON of the user's clothing items
+        $.get($SCRIPT_ROOT + '/get_wardrobe', function(data) {
+            //add their items to the table
+            //console.log(JSON.parse(data))
+            $('#table').bootstrapTable({data : JSON.parse(data)});
+        });
+        return false;
+    });
+</script>
+
 <div class="container">
     <table id="table"
         data-checkbox-header="false"
@@ -124,7 +144,7 @@ $(document).ready(function(){
     </table>
 </div>
 
-<script type=text/javascript>
+<!--script type=text/javascript>
     //define root to main
     $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     
@@ -136,12 +156,12 @@ $(document).ready(function(){
         //make a get request to /get_wardrobe, which returns JSON of the user's clothing items
         $.get($SCRIPT_ROOT + '/get_wardrobe', function(data) {
             //add their items to the table
+            //console.log(JSON.parse(data))
             $('#table').bootstrapTable({data : JSON.parse(data)});
         });
         return false;
     });
-
-</script>
+</script-->
 
 <!--script>
   var $table = $('#table')

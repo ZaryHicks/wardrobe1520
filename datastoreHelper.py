@@ -69,66 +69,61 @@ def add_item(user, item):
     # get datastore client
     client = get_client()
 
-    # idea is to use a transaction that either gets the entity or creates it if need be?
+    # idea is to use a transaction that either gets the entity or creates it if there is none
     with client.transaction():
-        # key is based on Wardrobe kind and id by username
-        key = client.key('Wardrobe', user)
 
-        # get the Wardrobe entity
-        wardrobe = client.get(key)
+        # new kind - Clothing
+        # item key is Clothing/(random int id)
+        # properties are: user(username), item_id(int for item type) and then the item itself(json string of the item)
 
-        # need to use JSON probably
-        # serialize our list of clothing into json, store that
-        # when we read, read in the json into a list of clothing,
-        # add to it, serialize back
+        # key is based on Clothing kind, datastore will give us an int identifier
+        key = client.key('Clothing')
 
-        # if a Wardrobe does not exist for this user
-        if not wardrobe:
-            # create a Wardrobe entity with this key (username)
-            wardrobe = datastore.Entity(key)
+        # Make a Clothing entity for this item
+        clothing = datastore.Entity(key)
 
-            # items is an array of clothing, containing our first item
-            items = [item]
-            # items.append(item)
+        # User who owns the item (for query)
+        clothing['username'] = user
+        # item type specified with an int id (for query)
+        clothing['type'] = get_clothing_type(item.type)
+        # the Clothing object itself
+        clothing['data'] = json.dumps(item, indent=4, cls=dataClasses.ClothingEncoder)
 
-            # serialize the array (here only one item) into json
-            array_json = json.dumps(items, indent=4, cls=dataClasses.ClothingEncoder)
+        # from our entity, decode json in clothing property # into an array of clothing items # items = json.loads(wardrobe['clothing'])
 
-            # then set clothing property to this json string
-            wardrobe['clothing'] = array_json
-            # client.put(wardrobe)
-        else:
-            # else if the entity already exists, we add the item to the list
+        # put item into datastore
+        client.put(clothing)
 
-            # from our entity, decode json in clothing property
-            # into an array of clothing items
-            items = json.loads(wardrobe['clothing'])
 
-            # append the item we are adding to the list
-            items.append(item)
+# Get clothing type - looks at type string and returns an int for the type
+def get_clothing_type(type):
+    if type == "Jacket":
+        return 0
+    elif type == "Shirt":
+        return 1
+    elif type == "Pants":
+        return 2
+    else:
+        return 3
 
-            array_json = json.dumps(items, indent=4, cls=dataClasses.ClothingEncoder)
-            wardrobe['clothing'] = array_json
-
-        client.put(wardrobe)
 
 # get user's wardrobe info and return it to main as JSON
 def get_wardrobe(user):
     # get datastore client
     client = get_client()
 
-    # idea is to use a transaction that either gets the entity or creates it if need be?
-    with client.transaction():
-        # key is based on Wardrobe kind and id by username
-        key = client.key('Wardrobe', user)
+    # to get whole wardrobe, query all "Clothing" entities for the user's items
+    # we will return an array of the Clothing items for this user
 
-        # get the Wardrobe entity
-        wardrobe = client.get(key)
+    q = client.query(kind='Clothing')
+    q.add_filter('username', '=', user)
 
-        # from our entity, decode json in clothing property
-        # into an array of clothing items
-        items = json.loads(wardrobe['clothing'])
+    items = []
+    # for each Clothing kind fetched, add its data string to an array
+    for item in q.fetch():
+        # add each item into the array as a Clothing item loaded from the JSON
+        items.append(json.loads(item['data']))
 
-        array_json = json.dumps(items, indent=4, cls=dataClasses.ClothingEncoder)
-
+    # then we turn the entire array into JSON and send it to the client
+    array_json = json.dumps(items, indent=4, cls=dataClasses.ClothingEncoder)
     return array_json

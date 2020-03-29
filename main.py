@@ -279,6 +279,12 @@ def get_user():
 # method to generate outfits
 @app.route('/generate', methods=['POST'])
 def get_outfits():
+    isCasual = 'True'
+    includeJacket = True
+    includeShirts = True
+    includePants = True
+    includeShoes = False
+    hardInclude = False
     temp = 45
     outfits = []
     if temp is not None:
@@ -288,27 +294,111 @@ def get_outfits():
         shirts = []
         pants = []
         shoes = []
-        # print(wardrobeTable[0])
-        # print(111)
         for i in wardrobeTable:
-            # print(i)
             if i['type'] == 'Jacket':
-                # print(1)
                 jackets.append(i)
             elif i['type'] == 'Shirt':
-                # print(2)
                 shirts.append(i)
             elif i['type'] == 'Pants':
-                # print(3)
                 pants.append(i)
             elif i['type'] == 'Shoes':
-                # print(4)
                 shoes.append(i)
-        # print('Contents')
-        # print(jackets[1])
-        # print(shirts)
-        # print(pants)
-        # print(shoes)
+        useableJacket = []
+        useableShirts = []
+        useablePants = []
+        useableShoes = []
+
+        if includeJacket:
+            for i in jackets:
+                if int(i['high_temp']) >= temp and int(i['low_temp']) <= temp and i['is_casual'] == isCasual:
+                    useableJacket.append(i)
+        if includeShirts:
+            for i in shirts:
+                if int(i['high_temp']) >= temp and int(i['low_temp']) <= temp and i['is_casual'] == isCasual:
+                    useableShirts.append(i)
+
+        if includePants:
+            for i in pants:
+                if int(i['high_temp']) >= temp and int(i['low_temp']) <= temp and i['is_casual'] == isCasual:
+                    useablePants.append(i)
+
+        if includeShoes:
+            for i in shirts:
+                if int(i['high_temp']) >= temp and int(i['low_temp']) <= temp and i['is_casual'] == isCasual:
+                    useableShoes.append(i)
+
+        if hardInclude:
+            if includeJacket and useableJacket == []:
+                return None
+            if includeShirts and useableShirts == []:
+                return None
+            if includePants and useablePants == []:
+                return None
+            if includeShoes and useableShoes == []:
+                return None
+
+        considered = []
+
+        if useableJacket != []:
+            considered.append(useableJacket)
+        if useableShirts != []:
+            considered.append(useableShirts)
+        if useablePants != []:
+            considered.append(useablePants)
+        if useableShoes != []:
+            considered.append(useableShoes)
+        if considered == []:
+            return None
+        acheck = 0
+        bcheck = 0
+        ccheck = 0
+        dcheck = 0
+        conlength = len(considered)
+
+        while acheck < len(considered[0]):
+            outfit = []
+            if conlength == 1:
+                outfit.append(considered[0][acheck])
+                outfits.append(outfit)
+                acheck = acheck+1
+            elif conlength == 2:
+                outfit.append(considered[0][acheck])
+                outfit.append(considered[1][bcheck])
+                outfits.append(outfit)
+                bcheck = bcheck+1
+                if bcheck >= len(considered[1]):
+                    bcheck = 0
+                    acheck = acheck+1
+            elif conlength == 3:
+                outfit.append(considered[0][acheck])
+                outfit.append(considered[1][bcheck])
+                outfit.append(considered[2][ccheck])
+                outfits.append(outfit)
+                ccheck = ccheck+1
+                if ccheck >= len(considered[2]):
+                    ccheck = 0
+                    bcheck = bcheck+1
+                if bcheck >= len(considered[1]):
+                    bcheck = 0
+                    acheck = acheck+1
+            elif conlength == 4:
+                outfit.append(considered[0][acheck])
+                outfit.append(considered[1][bcheck])
+                outfit.append(considered[2][ccheck])
+                outfits.append(outfit)
+                dcheck = dcheck+1
+                if dcheck >= len(considered[3]):
+                    dcheck = 0
+                    ccheck = ccheck+1
+                if ccheck >= len(considered[2]):
+                    ccheck = 0
+                    bcheck = bcheck+1
+                if bcheck >= len(considered[1]):
+                    bcheck = 0
+                    acheck = acheck+1
+        print('Outfits')
+        for i in outfits:
+            print(i)
     return outfits
 
 

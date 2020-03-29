@@ -103,7 +103,7 @@ def get_clothing_type(type):
         return 1
     elif type == "Pants":
         return 2
-    else:
+    elif type == "Shoes":
         return 3
 
 
@@ -146,5 +146,6 @@ def delete_item(user,data):
         for item in q.fetch():
             if json.loads(item['data'])==element:
                 client.delete(item.key)
+                break
         q = client.query(kind='Clothing')
         q.add_filter('username', '=', user)

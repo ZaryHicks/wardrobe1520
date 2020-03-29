@@ -7,13 +7,22 @@ My Current Wardrobe
    Click "Remove Item" to remove an article of clothing
 </p>
 
+<!-- css to have things disappear -->
+<style>
+    .invisible{
+  display:none;
+  visibility:hidden;
+  }
+</style>
+
 <div>
     <!-- Add Item opens a modal window with a form for creating a clothing item -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Item</button>
 
     <!-- Remove Item will remove all of the items that are checked in the table from the wardrobe -->
-    <button type="button" class="btn btn-secondary" onclick="remClothes();">Remove Item</button>
+    <button type="button" class="btn btn-secondary" id="remover">Remove Item</button>
 </div>
+
 
 <!-- Add item modal -->
 <div class="Modal fade" id="myModal">
@@ -118,6 +127,7 @@ $(document).ready(function(){
             //console.log(JSON.parse(data))
             $('#table').bootstrapTable({data : JSON.parse(data)});
         });
+        
         return false;
     });
 </script>
@@ -129,7 +139,8 @@ $(document).ready(function(){
         thead-classes="thead-light">
         <thead>
             <tr>
-                <th data-field="state" data-checkbox="true">ID</th>
+                <th data-field="state" data-checkbox="true" >Remove</th>
+                <th data-field="id" data-sortable="true" data-visible="false">ID</th>
                 <th data-field="type" data-sortable="true">Type</th>
                 <th data-field="name" data-sortable="true">Name</th>
                 <th data-field="color" data-sortable="true">Color</th>
@@ -143,6 +154,52 @@ $(document).ready(function(){
         </tbody>
     </table>
 </div>
+
+<script>
+//script to remove rows
+  var $table = $('#table')
+  var $button = $('#remover')
+
+  $(function() {
+    $button.click(function () {
+        
+        //finds which rows are checked
+        var ids = $.map($table.bootstrapTable('getSelections'), function (row,$element) {
+            return row
+        })
+        console.log(ids)
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "/remove",
+            data: JSON.stringify(ids),
+            success: function (data) {
+                console.log(data);
+            },
+            dataType: "json"
+        });
+        //ids the tables for removing
+        $('#table').bootstrapTable('checkAll')
+        var rows = $('#table').bootstrapTable('getSelections')
+        $.each(rows,function(index,element){
+            element.id = index
+        })
+        $('#table').bootstrapTable('uncheckAll')
+
+        //gets the id of the table to remove
+        var idss = []
+        $.each(ids,function(index,element){
+             idss.push(element.id)
+        }) 
+        
+        //removes the table
+        $table.bootstrapTable('remove', {
+        field: 'id',
+        values: idss
+        })
+    })
+  })
+</script>
 
 <!--script type=text/javascript>
     //define root to main
@@ -251,10 +308,7 @@ function addClothes(){
     return true;
 }
 
-function remClothes(){
-	//Selected item(s) will be removed from the user's wardrobe and also from the database
-    
-}
+//Selected item(s) will be removed from the user's wardrobe and also from the database
 
 </script>
 {% endblock %}

@@ -127,3 +127,24 @@ def get_wardrobe(user):
     # then we turn the entire array into JSON and send it to the client
     array_json = json.dumps(items, indent=4, cls=dataClasses.ClothingEncoder)
     return array_json
+
+
+#deletes an item from the database
+def delete_item(user,data):
+    #get datastore client
+    client = get_client()
+
+    #creates a query based on the data
+    q = client.query(kind='Clothing')
+    q.add_filter('username', '=', user)
+
+    for element in data:
+        if 'id' in element:
+            del element['id']
+        if 'state' in element:
+            del element['state']
+        for item in q.fetch():
+            if json.loads(item['data'])==element:
+                client.delete(item.key)
+        q = client.query(kind='Clothing')
+        q.add_filter('username', '=', user)

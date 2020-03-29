@@ -1,4 +1,5 @@
 import flask
+from flask import request
 # Darksky API
 from darksky.api import DarkSky
 from darksky.types import languages, units, weather
@@ -265,6 +266,8 @@ def add_item():
 # method to remove an item from the wardrobe
 @app.route('/remove', methods=['POST'])
 def remove_item():
+    data = request.json
+    datastoreHelper.delete_item(get_user(), data)
     return flask.redirect('/wardrobe')
 
 
@@ -328,4 +331,4 @@ def hash_password(pw):
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='127.0.0.1', port=8000, debug=True)

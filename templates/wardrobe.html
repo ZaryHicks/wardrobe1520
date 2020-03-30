@@ -3,26 +3,6 @@
 My Current Wardrobe
 {% endblock %}
 {% block content %}
-<p>Click "Add Item" to add a new article of clothing to your Wardrobe<br>
-   Click "Remove Item" to remove an article of clothing
-</p>
-
-<!-- css to have things disappear -->
-<style>
-    .invisible{
-  display:none;
-  visibility:hidden;
-  }
-</style>
-
-<div>
-    <!-- Add Item opens a modal window with a form for creating a clothing item -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add Item</button>
-
-    <!-- Remove Item will remove all of the items that are checked in the table from the wardrobe -->
-    <button type="button" class="btn btn-secondary" id="remover">Remove Item</button>
-</div>
-
 
 <!-- Add item modal -->
 <div class="Modal fade" id="myModal">
@@ -132,29 +112,238 @@ $(document).ready(function(){
     });
 </script>
 
-<div class="container">
-    <table id="table"
-        data-checkbox-header="false"
-        data-click-to-select="true"
-        thead-classes="thead-light">
-        <thead>
-            <tr>
-                <th data-field="state" data-checkbox="true" >Remove</th>
-                <th data-field="id" data-sortable="true" data-visible="false">ID</th>
-                <th data-field="type" data-sortable="true">Type</th>
-                <th data-field="name" data-sortable="true">Name</th>
-                <th data-field="color" data-sortable="true">Color</th>
-                <th data-field="is_casual" data-sortable="true">Casual</th>
-                <th data-field="high_temp" data-sortable="true">High</th>
-                <th data-field="low_temp" data-sortable="true">Low</th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="row vhm-60">
+    <div class="col-sm-3 w-bg-color-1 p-3 text-center flexbox">
+        <h4>Wardrobe</h4>
+         <!--<p class="text-center p-3 m-0">Click <b>Add Item</b> to add a new article of clothing to your Wardrobe<br>
+        Check item(s) and click <b>Remove Item</b> to remove an article of clothing
+        </p>-->
+        <div>
+            <!-- Add Item opens a modal window with a form for creating a clothing item -->
+            <button type="button" class="btn btn-primary my-3 w-70" data-toggle="modal" data-target="#myModal">Add Item</button>
+            <!-- Remove Item will remove all of the items that are checked in the table from the wardrobe -->
+            <button type="button" class="btn btn-secondary my-3 w-70" id="remover">Remove Item</button>
+        </div>
+    </div>
+    <div class="col-sm-9 p-0">
+        <div>
+            <table id="table"
+                data-checkbox-header="false"
+                data-click-to-select="true"
+                thead-classes="thead-light">
+                <thead>
+                    <tr>
+                        <th data-field="state" data-checkbox="true" >Remove</th>
+                        <th data-field="id" data-sortable="true" data-visible="false">ID</th>
+                        <th data-field="type" data-sortable="true">Type</th>
+                        <th data-field="name" data-sortable="true">Name</th>
+                        <th data-field="color" data-sortable="true">Color</th>
+                        <th data-field="is_casual" data-sortable="true">Casual</th>
+                        <th data-field="high_temp" data-sortable="true">High</th>
+                        <th data-field="low_temp" data-sortable="true">Low</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
+
+<!-- Recommendations Section (Bootsrap JS Carousel Part of Options) -->
+<div class="row vh-100">
+    <div class="form-generate col-sm-3 w-bg-color-1 p-0 flexbox">
+        <form method="post" action="/generate"class="text-center p-3">
+            <h4 class="py-3">Recommend</h4>
+            <h6 class="m-0">Temperature (°F)</h6>
+            <input type="text" id="temp-generate" name="temp" value="45" class="form-control text-center w-bg-color-1"> <!-- HARDCODED, need darksky --> 
+            <h6 class="m-0">Casual</h6>
+            <select id="casual-generate" name="casual-generate" class="form-control w-bg-color-1">
+                <option value="True">Yes</option>
+                <option value="False">No</option>
+            </select>
+            <input type="submit" value="Generate" class="btn btn-primary mt-3">
+        </form>
+    </div>
+
+    
+    <div class="col-sm-9 showcase-background-welcome-blur">
+        <div class="row">
+            <div class= "col-sm-7">
+                <div id="outfit-image-container">
+                    <object class="outfit-image" type="image/svg+xml" data="/static/images/outfit.svg"></object>
+                </div>
+            </div>
+            <div class="col-sm-5 text-center flexbox">
+            <button class="btn my-3 btn-secondary" id="change-jacket">Change Jacket</button>
+            <button class="btn my-3 btn-secondary" id="change-shirt">Change Shirt</button>
+            <button class="btn my-3 btn-secondary" id="change-pants">Change Pants</button>
+            <button class="btn my-3 btn-secondary" id="change-shoes">Change Shoes</button>
+
+            <div id="outfit-text">
+                <div class="notice">Generate outfits to see options here</div>
+                <div class="jackets"></div>
+                <div class="shirts"></div>
+                <div class="pants"></div>
+                <div class="shoes"></div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recommendations Section (table part of options) -->
+<div class="container-fluid w-bg-color-1 all-combos-container">
+    <h3 class=" text-center p-3">All Outfit Combinations</h3>
+    <div id="all-combos"></div>
+</div>
+
+<script>
+// helper functions
+function getTypes(type, array)
+{
+    var typeArr = []
+    for(i = 0; i < array.length; i++)
+    {
+        if(array[i].type === type)
+        {
+            typeArr.push(array[i]);
+        }
+    }
+    return typeArr;
+}
+
+function circleI(i, array)
+{
+    if(i+1 >= array.length)
+        return 0;
+    else
+        return i+1;
+}
+// script to handle generate form
+$('.form-generate form').submit(function(event){
+    event.preventDefault();
+
+    var casualGenerate = document.getElementById('casual-generate').value;
+    var tempGenerate = document.getElementById('temp-generate').value;
+    $.ajax({
+        type : "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url : "/generate?clothes=yes",
+        data: JSON.stringify({
+                  'casual-generate': casualGenerate,
+                  'temp-generate': tempGenerate,
+               }),
+        success: function (response, status) {
+            //console.log(status);
+            var items = response;
+            //console.log(response);
+
+            //show buttons
+            $("#change-jacket, #change-shirt, #change-pants, #change-shoes").css(
+                "display", "block");
+
+            //sort items in pile to arrays:
+            var jackets = getTypes('Jacket', items);
+            var indexJackets = 0;
+            var shirts = getTypes('Shirt', items);
+            var indexShirts = 0;
+            var pants = getTypes('Pants', items);
+            var indexPants = 0;
+            var shoes = getTypes('Shoes', items);
+            var indexShoes = 0;
+
+            //show first outfit
+            if(jackets.length > 0)
+            {
+                document.querySelector(".outfit-image").getSVGDocument().querySelector("#jacket path").style.fill = jackets[indexJackets].color;
+                indexJackets = circleI(indexJackets, jackets);
+            }
+            if(shirts.length > 0)
+            {
+                document.querySelector(".outfit-image").getSVGDocument().querySelector("#t-shirt path").style.fill = shirts[indexShirts].color;
+                indexShirts = circleI(indexShirts, shirts);
+                //console.log(shirts);
+            }
+            if(pants.length > 0)
+            {
+                document.querySelector(".outfit-image").getSVGDocument().querySelector("#pants path").style.fill = pants[indexPants].color;
+                indexPants = circleI(indexPants, pants);
+            }
+            if(shoes.length > 0)
+            {
+                document.querySelector(".outfit-image").getSVGDocument().querySelector("#shoes-color path").style.fill = shoes[indexShoes].color;
+                indexShoes = circleI(indexShoes, shoes);
+            }
+
+            //TODO: clicks (same code, could be codensed)
+            document.getElementById("change-jacket").addEventListener("click", function() {
+                if(jackets.length > 0)
+                {
+                    document.querySelector(".outfit-image").getSVGDocument().querySelector("#jacket path").style.fill = jackets[indexJackets].color;
+                    indexJackets = circleI(indexJackets, jackets);
+                    $('.jackets').html('Jacket: ' + jackets[indexJackets].name + '<br>');
+                }
+            });
+            document.getElementById("change-shirt").addEventListener("click", function() {
+                if(shirts.length > 0)
+                {
+                    document.querySelector(".outfit-image").getSVGDocument().querySelector("#t-shirt path").style.fill = shirts[indexShirts].color;
+                    $('.shirts').html('Shirt: ' + shirts[indexShirts].name + '<br>');
+                    indexShirts = circleI(indexShirts, shirts);
+                }
+            });
+            document.getElementById("change-pants").addEventListener("click", function() {
+                if(pants.length > 0)
+                {
+                    document.querySelector(".outfit-image").getSVGDocument().querySelector("#pants path").style.fill = pants[indexPants].color;
+                    $('.pants').html('Pants: ' + pants[indexPants].name + '<br>');
+                    indexPants = circleI(indexPants, pants);
+                }
+            });
+            document.getElementById("change-shoes").addEventListener("click", function() {
+                if(shoes.length > 0)
+                {
+                    document.querySelector(".outfit-image").getSVGDocument().querySelector("#shoes-color path").style.fill = shoes[indexShoes].color;
+                    $('.shoes').html('Shoes: ' + shoes[indexShoes].name + '<br>');
+                    indexShoes = circleI(indexShoes, shoes);
+                }
+            });
+
+            // change instruction text to outfit
+            $('.notice').html('');
+            if(jackets.length > 0) { $('.jackets').html('Jacket: ' + jackets[indexJackets].name + '<br>'); }
+            if(shirts.length > 0) { $('.shirts').html('Shirt: ' + shirts[indexShirts].name + '<br>'); }
+            if(pants.length > 0) { $('.pants').html('Pants: ' + pants[indexPants].name + '<br>'); }
+            if(shoes.length > 0) { $('.shoes').html('Shoes: ' + shoes[indexShoes].name + '<br>'); }
+        },
+    });
+    $.ajax({
+        type : "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url : "/generate?clothes=no",
+        data: JSON.stringify({
+                  'casual-generate': casualGenerate,
+                  'temp-generate': tempGenerate,
+               }),
+        success: function (data, status) {
+            $('.all-combos-container').css('display', 'block');
+            for(i = 0; i < data.length; i++)
+            {
+                for(j = 0; j < data[i].length; j++)
+                {
+                    $('#all-combos').append('<div style="width:33%;""><b>' + data[i][j].type + '</b><br>' + data[i][j].name +'</div>');
+                }
+            }
+            
+        }
+    });
+});
+</script>
 <script>
 //script to remove rows
   var $table = $('#table')

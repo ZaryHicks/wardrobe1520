@@ -11,7 +11,7 @@ import hashlib
 import json
 
 
-GKey = "Get from google console's API credentials under this project."
+GKey = "AIzaSyAPp6UgeRBiEu0HibhtXqONS_Qf97b-S3Y"
 
 
 app = flask.Flask(__name__)

@@ -201,6 +201,8 @@ $(document).ready(function(){
 </div>
 
 <script>
+// get temp value for autofill in form
+document.getElementById("temp-generate").value = localStorage.getItem('Temp').substring(0, localStorage.getItem('Temp').indexOf('°'));
 // helper functions
 function getTypes(type, array)
 {

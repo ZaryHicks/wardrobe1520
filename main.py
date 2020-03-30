@@ -327,7 +327,7 @@ def get_outfits():
                     useablePants.append(i)
 
         if includeShoes:
-            for i in shirts:
+            for i in shoes:
                 if int(i['high_temp']) >= temp and int(i['low_temp']) <= temp and i['is_casual'] == isCasual:
                     useableShoes.append(i)
 
@@ -361,7 +361,7 @@ def get_outfits():
             ccheck = 0
             dcheck = 0
             conlength = len(considered)
-
+            print(conlength)
             while acheck < len(considered[0]):
                 outfit = []
                 if conlength == 1:

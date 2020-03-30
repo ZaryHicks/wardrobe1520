@@ -278,6 +278,7 @@ $('.form-generate form').submit(function(event){
             if(shoes.length > 0)
             {
                 document.querySelector(".outfit-image").getSVGDocument().querySelector("#shoes-color path").style.fill = shoes[indexShoes].color;
+                document.querySelector(".outfit-image").getSVGDocument().querySelector("#shoes-color1 path").style.fill = shoes[indexShoes].color;
                 indexShoes = circleI(indexShoes, shoes);
             }
 
@@ -310,6 +311,7 @@ $('.form-generate form').submit(function(event){
                 if(shoes.length > 0)
                 {
                     document.querySelector(".outfit-image").getSVGDocument().querySelector("#shoes-color path").style.fill = shoes[indexShoes].color;
+                    document.querySelector(".outfit-image").getSVGDocument().querySelector("#shoes-color1 path").style.fill = shoes[indexShoes].color;
                     $('.shoes').html('Shoes: ' + shoes[indexShoes].name + '<br>');
                     indexShoes = circleI(indexShoes, shoes);
                 }

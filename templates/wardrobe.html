@@ -188,6 +188,16 @@ $(document).ready(function(){
                 <div class="shirts"></div>
                 <div class="pants"></div>
                 <div class="shoes"></div>
+                <div id="twitter-share-button-div"></div>
+                <a class="twitter-share-button-temp"
+                    style="display:none;"
+                    href="https://twitter.com/intent/tweet"
+                    data-size="large"
+                    data-text="custom share text"
+                    data-url="https://dev.twitter.com/web/tweet-button">
+                    Tweet
+                </a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
             </div>
         </div>
@@ -223,6 +233,28 @@ function circleI(i, array)
         return 0;
     else
         return i+1;
+}
+
+function updateTweet(jackets, indexJackets, shirts, indexShirts, pants, indexPants, shoes, indexShoes)
+{
+    var defaultText = 'Hey'+/*' @jakestambaugh '+*/'! My outfit of the day is \n'
+    var newText = defaultText;
+    if(jackets.length > 0) { newText = newText+('Jacket: ' + jackets[indexJackets].name+"\n"); }
+    if(shirts.length > 0) { newText = newText+('Shirt: ' + shirts[indexShirts].name+"\n"); }
+    if(pants.length > 0) { newText = newText+('Pants: ' + pants[indexPants].name+"\n"); }
+    if(shoes.length > 0) { newText = newText+('Shoes: ' + shoes[indexShoes].name+"\n"); }
+    $('#twitter-share-button-div').empty()
+    if(newText !== defaultText){    
+        var clone = $('.twitter-share-button-temp').clone();
+        clone.removeAttr("style");
+        clone.attr("data-text", newText);
+        clone.attr("data-url", "http://wardrobe-268517.appspot.com/"); 
+        clone.attr("class", "twitter-share-button"); 
+
+        $('#twitter-share-button-div').append(clone);
+        //$.getScript("http://platform.twitter.com/widgets.js");
+        twttr.widgets.load();
+    }
 }
 // script to handle generate form
 $('.form-generate form').submit(function(event){
@@ -289,6 +321,7 @@ $('.form-generate form').submit(function(event){
                     document.querySelector(".outfit-image").getSVGDocument().querySelector("#jacket path").style.fill = jackets[indexJackets].color;
                     indexJackets = circleI(indexJackets, jackets);
                     $('.jackets').html('Jacket: ' + jackets[indexJackets].name + '<br>');
+                    updateTweet(jackets, indexJackets, shirts, indexShirts, pants, indexPants, shoes, indexShoes);
                 }
             });
             document.getElementById("change-shirt").addEventListener("click", function() {
@@ -297,6 +330,7 @@ $('.form-generate form').submit(function(event){
                     document.querySelector(".outfit-image").getSVGDocument().querySelector("#t-shirt path").style.fill = shirts[indexShirts].color;
                     $('.shirts').html('Shirt: ' + shirts[indexShirts].name + '<br>');
                     indexShirts = circleI(indexShirts, shirts);
+                    updateTweet(jackets, indexJackets, shirts, indexShirts, pants, indexPants, shoes, indexShoes);
                 }
             });
             document.getElementById("change-pants").addEventListener("click", function() {
@@ -305,6 +339,7 @@ $('.form-generate form').submit(function(event){
                     document.querySelector(".outfit-image").getSVGDocument().querySelector("#pants path").style.fill = pants[indexPants].color;
                     $('.pants').html('Pants: ' + pants[indexPants].name + '<br>');
                     indexPants = circleI(indexPants, pants);
+                    updateTweet(jackets, indexJackets, shirts, indexShirts, pants, indexPants, shoes, indexShoes);
                 }
             });
             document.getElementById("change-shoes").addEventListener("click", function() {
@@ -314,15 +349,17 @@ $('.form-generate form').submit(function(event){
                     document.querySelector(".outfit-image").getSVGDocument().querySelector("#shoes-color1 path").style.fill = shoes[indexShoes].color;
                     $('.shoes').html('Shoes: ' + shoes[indexShoes].name + '<br>');
                     indexShoes = circleI(indexShoes, shoes);
+                    updateTweet(jackets, indexJackets, shirts, indexShirts, pants, indexPants, shoes, indexShoes);
                 }
             });
 
             // change instruction text to outfit
             $('.notice').html('');
-            if(jackets.length > 0) { $('.jackets').html('Jacket: ' + jackets[indexJackets].name + '<br>'); }
-            if(shirts.length > 0) { $('.shirts').html('Shirt: ' + shirts[indexShirts].name + '<br>'); }
-            if(pants.length > 0) { $('.pants').html('Pants: ' + pants[indexPants].name + '<br>'); }
-            if(shoes.length > 0) { $('.shoes').html('Shoes: ' + shoes[indexShoes].name + '<br>'); }
+            if(jackets.length > 0) { $('.jackets').html('Jacket: ' + jackets[indexJackets].name + '<br>');}
+            if(shirts.length > 0) { $('.shirts').html('Shirt: ' + shirts[indexShirts].name + '<br>');}
+            if(pants.length > 0) { $('.pants').html('Pants: ' + pants[indexPants].name + '<br>');}
+            if(shoes.length > 0) { $('.shoes').html('Shoes: ' + shoes[indexShoes].name + '<br>');}
+            updateTweet(jackets, indexJackets, shirts, indexShirts, pants, indexPants, shoes, indexShoes);
         },
     });
     $.ajax({
@@ -393,83 +430,6 @@ $('.form-generate form').submit(function(event){
     })
   })
 </script>
-
-<!--script type=text/javascript>
-    //define root to main
-    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-    
-    //*** IF we want to change how the data in the table looks, we can easily modify it in /get_wardrobe BEFORE we return it here
-    //So formatting and some other things could be done on the data easily in python and then that could be sent up to the table
-
-    //call this function when the page loads
-    $(function() {
-        //make a get request to /get_wardrobe, which returns JSON of the user's clothing items
-        $.get($SCRIPT_ROOT + '/get_wardrobe', function(data) {
-            //add their items to the table
-            //console.log(JSON.parse(data))
-            $('#table').bootstrapTable({data : JSON.parse(data)});
-        });
-        return false;
-    });
-</script-->
-
-<!--script>
-  var $table = $('#table')
-
-  $(function() {
-    var data = [
-      {
-        'type': 'Jacket',
-        'name': 'Denim',
-        'color': 'Navy',
-        'casual': 'Yes',
-        'high': '75',
-        'low': '50'
-      },
-      {
-        'type': 'Jacket',
-        'name': 'Winter Coat',
-        'color': 'Gray',
-        'casual': 'Yes',
-        'high': '40',
-        'low': '-10'
-      },
-      {
-        'type': 'Pants',
-        'name': 'AE Jeans',
-        'color': 'Navy',
-        'casual': 'Yes',
-        'high': '65',
-        'low': '50'
-      },
-      {
-        'type': 'Pants',
-        'name': 'Chinos',
-        'color': 'Khaki',
-        'casual': 'No',
-        'high': '65',
-        'low': '50'
-      },
-      {
-        'type': 'Shoes',
-        'name': 'Adidas Stan Smiths',
-        'color': 'White',
-        'casual': 'Yes',
-        'high': '',
-        'low': ''
-      },
-      {
-        'type': 'Shirt',
-        'name': 'T-Shirt',
-        'color': 'Red',
-        'casual': 'Yes',
-        'high': '90',
-        'low': '50'
-      }
-    ]
-    $table.bootstrapTable({data: data})
-  })
-</script-->
 
 <script>
 

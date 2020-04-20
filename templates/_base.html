@@ -3,17 +3,18 @@
 		<title>{{page_title}}</title>
         <!-- Bootstrap CDN -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
         <!-- Bootstrap Table CDN -->
         <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
         <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
         <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/locale/bootstrap-table.min.js"></script>
         
+        <!-- Mobile Support -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <!-- these will be used to add/override bootstrap styles --> 
         <!-- <link rel="stylesheet" href="static/style.css"> TESTING OTHER STYLE -->
         <link rel="stylesheet" href="css/bootstrap-adds.css">
@@ -39,7 +40,7 @@
                 color: white;
             }
             .form-main {
-                width: 60%;
+                width: 75%;
                 padding: 1.5em;
                 background-color: white;
                 border-radius: 5px;
@@ -86,6 +87,8 @@
             .outfit-image
             {
                 width: 70%;
+                display: block;
+                margin: auto;
             }
 
             #change-jacket, #change-shirt, #change-pants, #change-shoes { display: none; }
@@ -106,6 +109,7 @@
             }
 
             .weather-nav { border-left: solid 1px; }
+
         </style>
     <script>
 
@@ -195,15 +199,17 @@ function hideError() {
 	<body>
 
         <!-- NAVIGATION -->
-	    <nav class="navbar px-5 py-3 w-bg-color-1">
-            {% if not user %}
-                <a href="/welcome" class="nav-link">Welcome</a> <!-- try this for a landing page? welcome.html changed in app.yaml -->
-                <a href="/welcome#about" class="nav-link">About</a>
-            {% else %}
-                <a href="/" class="nav-link">Home</a> <!-- TEMPLATING WILL CHANGE BASED ON LOGGED IN OR NOT -->
-                <a href="/wardrobe" class="nav-link">Wardobe</a> <!-- was /Index prior --> 
-            {% endif %}
-            <div class="ml-md-auto navbar-nav bd-navbar-nav flex-row">
+	    <nav class="navbar px-5 navbar-expand-sm py-3 w-bg-color-1">
+            <div class="navbar-nav">
+                {% if not user %}
+                    <a href="/welcome" class="nav-link">Welcome</a> <!-- try this for a landing page? welcome.html changed in app.yaml -->
+                    <a href="/welcome#about" class="nav-link">About</a>
+                {% else %}
+                    <a href="/" class="nav-link">Home</a> <!-- TEMPLATING WILL CHANGE BASED ON LOGGED IN OR NOT -->
+                    <a href="/wardrobe" class="nav-link">Wardobe</a> <!-- was /Index prior --> 
+                {% endif %}
+            </div>
+            <div class="ml-md-auto navbar-nav bd-navbar-nav">
                 {% if not user %}
                     <a href="/signup" class="nav-link p-3">Sign Up</a>
                     <a href="/signin" class="nav-link p-3">Sign In</a>

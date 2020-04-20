@@ -112,7 +112,7 @@ $(document).ready(function(){
     });
 </script>
 
-<div class="row vhm-60">
+<div class="row vhm-60 m-0">
     <div class="col-sm-3 w-bg-color-1 p-3 text-center flexbox">
         <h4>Wardrobe</h4>
          <!--<p class="text-center p-3 m-0">Click <b>Add Item</b> to add a new article of clothing to your Wardrobe<br>
@@ -153,7 +153,7 @@ $(document).ready(function(){
 
 
 <!-- Recommendations Section (Bootsrap JS Carousel Part of Options) -->
-<div class="row vh-100">
+<div class="row min-vh-100 m-0">
     <div class="form-generate col-sm-3 w-bg-color-1 p-0 flexbox">
         <form method="post" action="/generate"class="text-center p-3">
             <h4 class="py-3">Recommend</h4>
@@ -170,7 +170,7 @@ $(document).ready(function(){
 
     
     <div class="col-sm-9 showcase-background-welcome-blur">
-        <div class="row">
+        <div class="row  align-items-center h-100">
             <div class= "col-sm-7">
                 <div id="outfit-image-container">
                     <object class="outfit-image" type="image/svg+xml" data="/static/images/outfit.svg"></object>
@@ -205,7 +205,7 @@ $(document).ready(function(){
 </div>
 
 <!-- Recommendations Section (table part of options) -->
-<div class="container-fluid w-bg-color-1 all-combos-container">
+<div class="container-fluid w-bg-color-1 all-combos-container overflow-auto">
     <h3 class=" text-center p-3">All Outfit Combinations</h3>
     <div id="all-combos"></div>
 </div>
@@ -373,12 +373,16 @@ $('.form-generate form').submit(function(event){
                }),
         success: function (data, status) {
             $('.all-combos-container').css('display', 'block');
+            
             for(i = 0; i < data.length; i++)
             {
+                var card = $('<div class="card m-3 p-3 float-left">');
                 for(j = 0; j < data[i].length; j++)
                 {
-                    $('#all-combos').append('<div style="width:33%;""><b>' + data[i][j].type + '</b><br>' + data[i][j].name +'</div>');
+                    card.append( data[i][j].name + ' ' + data[i][j].type + '<br>');
                 }
+                card.append('</div>');
+                $('#all-combos').append(card);
             }
             
         }

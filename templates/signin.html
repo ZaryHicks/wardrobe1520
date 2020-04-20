@@ -1,15 +1,15 @@
 {% extends '_base.html' %}
 {% block content %}
 
-    <div class="container-fluid vh-100 showcase-background">
+    <div class="container-fluid showcase-background">
         {% if errors %}{% for error in errors %}
             <div>
                 <div class="Error">{{error}}</div>
             </div>
         {% endfor %}{% endif %}
 
-        <div class="row h-100 justify-content-center align-items-center">
-            <form class="form-main" method="post" action="/login">
+        <div class="row min-vh-100 justify-content-center align-items-center">
+            <form class="form-main my-3" method="post" action="/login">
             <!-- Title -->
             <h2 class="text-center w-color-1">{{page_title}}</h2>
                 <div class="form-group">

@@ -158,10 +158,15 @@ def delete_item(user, data):
             del element['id']
         if 'state' in element:
             del element['state']
+        if 'tags' in element:
+            del element['tags']
         if 'editRow' in element:
             del element['editRow']
         for item in q.fetch():
-            if json.loads(item['data']) == element:
+            thisEle = json.loads(item['data'])
+            if 'tags' in thisEle:
+                del thisEle['tags']
+            if thisEle == element:
                 client.delete(item.key)
                 break
         q = client.query(kind='Clothing')

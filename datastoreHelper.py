@@ -128,13 +128,14 @@ def get_wardrobe(user):
         map = json.loads(item['data'])
         # use magic to add a button to the json rows
         # now, how do we make this work on the frontend (and how to style this more?)
-        map['editRow'] = '<button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>'
+        button = '<button type="button" onclick="populateEdit()" data-toggle="modal" data-target="#editModal" class="btn btn-success">Edit</button>'
+        map['editRow'] = button
         # puts in the tags as actual tags
         if "tags" in map:
             if map['tags'] != '':
-                str = map['tags'].split(',')
+                strn = map['tags'].split(',')
                 strin = ''
-                for item in str:
+                for item in strn:
                     strin = strin+'<span class="tag2">'+item+'</span>'
                 map['tags'] = strin
         items.append(map)

@@ -185,13 +185,333 @@ My Current Wardrobe
     </div>
 </div>
 
-<!-- JS that clears the form in the add item modal when the modal is closed (on submission or otherwise) -->
+<!-- Edit item modal -->
+<div class="Modal fade" id="editModal">
+    <div class="modal-dialog" align="center">
+        
+        <!-- Modal Content -->
+        <div class="modal-content" align="center">
+            <div class="modal-body" align="center">
+                <form class="form-main" id="editItemForm" method="post" action="/edit" onsubmit="return addClothes();" align="center">
+                    <!-- Title -->
+                    <h2 class="text-center w-color-1" align="center">Edit Item</h2>
+                    
+                    <!-- Clothing Type -->
+                    <!-- is there a way to have the form change based on the type we select? - then the type doesnt need to be in the form and is just hardcoded -->
+                    <div class="form-group">
+                        <label class="w-color-1">Type</label>
+                        <Select name="type" id="etypesel" class="form-control" align="center">
+                            <option name="type" value="Jacket">Jacket
+                            <option name="type" value="Shirt">Shirt
+                            <option name="type" value="Pants">Pants
+                            <option name="type" value="Shoes">Shoes
+                        </Select> 
+                    </div>
+
+                    <!-- Item Name -->
+                    <div class="form-group">
+                        <label class="w-color-1">Name</label>
+                        <input type="input" name="name" class="form-control" id="ename" required>
+                    </div>
+
+                    <!-- Item Color -->
+                    <div class="form-group">
+                        <label class="w-color-1">Color</label>
+                        <input type="color" name="color" class="form-control" id="ecolor" required>
+                    </div>
+
+                    <!-- Item Casual Dropdown -->
+                    <div class="form-group">
+                        <label class="w-color-1">Is it casual?</label>
+                        <Select name="casual" class="form-control" id="ecasual">
+                            <option name="casual" value="True">Yes
+                            <option name="casual" value="False">No
+                        </Select> 
+                    </div>
+
+                    <!-- Item Max Temp -->
+                    <div class="form-group">
+                        <label class="w-color-1">High temperature</label>
+                        <input type="number" name="high" class="form-control" id="ehigh" required>
+                    </div>
+
+                    <!-- Item Min Temp -->
+                    <div class="form-group">
+                        <label class="w-color-1">Low temperature</label>
+                        <input type="number" name="low" class="form-control" id="elow" required>
+                    </div>
+
+                    <!-- Custom tags -->
+                    <!-- Css for the tags -->
+                    <style>
+                        .tag {
+                            padding: 0.5em 0.75em;
+                            margin: 0.25em 0.1em;
+                            display: inline-block;
+                            background-color: #ddd;
+                            transition: all 0.1s linear;
+                            cursor: pointer;
+                        }
+
+                        .tag2 {
+                            padding: 0.5em 0.75em;
+                            margin: 0.25em 0.1em;
+                            display: inline-block;
+                            background-color: #ddd;
+                        }
+
+                        .tag:hover {
+                            background-color: #3af;
+                            color: white;
+                        }
+
+                        .tag .close::after {
+                            content: '×';
+                            font-weight: bold;
+                            display: inline-block;
+                            transform: scale(1.4);
+                            margin-left: 0.75em;
+                        }
+
+                        .tag .close:hover::after {
+                            color: red;
+                        }
+                    </style>
+
+                    <div class="tags-input" data-name="tags-input" id="etagdiv" class="form-group">
+                        <label class="w-color-1">Tags (hit space to submit):</label>
+                        <input type="hidden" name="tags-input" id="ehid">
+                        <input type="text" class="main-input" id="etaginput" class="form-control">
+                    </div>
+
+                    <!-- script for the edit tags -->
+                    <script>
+                        function estart(){
+                            tags = [];
+                            var space = document.getElementById('etagdiv');
+                            var hid = document.getElementById('ehid');
+                            var inp = document.getElementById('etaginput');
+
+                            //adds the tag when user types space
+                            inp.addEventListener('input',function(){
+                                var entered = inp.value.split(' ');
+                                if(entered.length > 1){
+                                    entered.forEach(function(tag){
+                                        if(tag.length>0){
+                                            eaddTag(tag);
+                                        }
+                                    });
+                                    inp.value = '';
+                                }
+                            });
+                            
+                            //deletes last tag when user presses backspace
+                            inp.addEventListener('keydown',function(key){
+                                var keyCode = key.which||key.keyCode;
+                                if (keyCode===8&&inp.value.length===0&&tags.length>0) {
+                                    eremoveTag(tags.length - 1);
+                                }
+                            });
+
+                            //adds the tag
+                            function eaddTag(text){
+                                var tag = {
+                                    text: text,
+                                    element: document.createElement('span'),
+                                };
+                                tag.element.classList.add('tag');
+                                tag.element.textContent = tag.text;
+                                var close = document.createElement('span');
+                                close.classList.add('close');
+                                close.addEventListener('click', function(){
+                                    eremoveTag(tags.indexOf(tag));
+                                });
+                                tag.element.appendChild(close);
+
+                                tags.push(tag);
+                                space.insertBefore(tag.element,inp);
+                                erefreshTags()
+                            }
+
+                            //removes tags
+                            function eremoveTag(i){
+                                var tag = tags[i];
+                                tags.splice(i,1);
+                                space.removeChild(tag.element);
+                                erefreshTags();
+                            }
+
+                            //refreshes tags
+                            function erefreshTags(){
+                                let tagsList = [];
+                                tags.forEach(function (t) {
+                                    tagsList.push(t.text);
+                                });
+                                hid.value = tagsList.join(',');
+                            }
+                        }
+                        estart();
+
+                        function autoAdd(arr){
+                            tags = [];
+                            var space = document.getElementById('etagdiv');
+                            var hid = document.getElementById('ehid');
+                            var inp = document.getElementById('etaginput');
+
+                            //adds the tag when user types space
+                            inp.addEventListener('input',function(){
+                                var entered = inp.value.split(' ');
+                                if(entered.length > 1){
+                                    entered.forEach(function(tag){
+                                        if(tag.length>0){
+                                            add(tag);
+                                        }
+                                    });
+                                    inp.value = '';
+                                }
+                            });
+                            
+                            //deletes last tag when user presses backspace
+                            inp.addEventListener('keydown',function(key){
+                                var keyCode = key.which||key.keyCode;
+                                if (keyCode===8&&inp.value.length===0&&tags.length>0) {
+                                    rem(tags.length - 1);
+                                }
+                            });
+
+                            //adds the tag
+                            function add(text){
+                                var tag = {
+                                    text: text,
+                                    element: document.createElement('span'),
+                                };
+                                tag.element.classList.add('tag');
+                                tag.element.textContent = tag.text;
+                                var close = document.createElement('span');
+                                close.classList.add('close');
+                                close.addEventListener('click', function(){
+                                    rem(tags.indexOf(tag));
+                                });
+                                tag.element.appendChild(close);
+
+                                tags.push(tag);
+                                space.insertBefore(tag.element,inp);
+                                ref()
+                            }
+
+                            //removes tags
+                            function rem(i){
+                                console.log("rem")
+                                var tag = tags[i];
+                                tags.splice(i,1);
+                                space.removeChild(tag.element);
+                                ref();
+                            }
+
+                            //refreshes tags
+                            function ref(){
+                                let tagsList = [];
+                                tags.forEach(function (t) {
+                                    tagsList.push(t.text);
+                                });
+                                hid.value = tagsList.join(',');
+                            }
+
+                            //execute
+                            for(let s of arr){
+                                if(s != "-" && s != ""){
+                                    add(s);
+                                }
+                            }
+                            $('#editModal').on('hide.bs.modal', function(){
+                                // should go through and remove
+                                let col = space.childNodes;
+                                console.log(col)
+                                for(let i = 0; i < col.length; i++){
+                                    console.log(col[i].nodeName);
+                                    if(col[i].nodeName == "SPAN"){
+                                        console.log("removing")
+                                        space.removeChild(col[i]);
+                                    }
+                                }
+                                console.log(space.childNodes)
+                            });
+
+                        }
+                    </script>
+
+                    <!-- Div for errors -->
+                    <div id="validater"></div>
+
+                    <!-- Submit Form -->
+                    <div class="form-group">
+                        <input type="submit" value="Submit" class="btn btn-primary w-bg-color-1">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS that clears the form in the add and edit item modal when the modal is closed (on submission or otherwise) -->
 <script>
 $(document).ready(function(){
   $("#myModal").on('hidden.bs.modal', function(){
     $(this).find('form')[0].reset();
   });
+  $("#editModal").on('hidden.bs.modal', function(){
+    $(this).find('form')[0].reset();
+  });
 });
+</script>
+
+<!-- JS for edit modal -->
+<script>
+    function populateEdit(){
+        $("#editModal").on('show.bs.modal', function(event){
+                let modal = $(this);
+
+                //get the values of this row
+                let type = $(event.relatedTarget).closest('tr').find('td:eq( 1 )').html();
+                let name = $(event.relatedTarget).closest('tr').find('td:eq( 2 )').html();
+                let color = $(event.relatedTarget).closest('tr').find('td:eq( 3 )').html();
+                let casual = $(event.relatedTarget).closest('tr').find('td:eq( 4 )').html();
+                let high = $(event.relatedTarget).closest('tr').find('td:eq( 5 )').html();
+                let low = $(event.relatedTarget).closest('tr').find('td:eq( 6 )').html();
+                let tags = $(event.relatedTarget).closest('tr').find('td:eq( 7 )').html();
+                console.log("Got " + type + " " + name + " " + color + " " + casual + " " + high + " " + low + " " + tags );
+
+                //set modal values to matc
+                modal.find('.modal-body #etypesel').val(type)
+                modal.find('.modal-body #ename').val(name)
+                modal.find('.modal-body #ecolor').val(color)
+                modal.find('.modal-body #ecasual').val(casual)
+                modal.find('.modal-body #ehigh').val(high)
+                modal.find('.modal-body #elow').val(low)
+
+                let re1 = new RegExp('<span class="tag2">', 'g');
+                let re2 = new RegExp('</span>', 'g');
+
+                let finishedTags = tags.replace(re1, "").replace(re2, ",");
+                let tArray = finishedTags.split(',');
+                //modal.find('.modal-body #etaginput').val(tArray);
+                autoAdd(tArray);
+                
+        });
+    };
+
+/*
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+})
+*/
+
 </script>
 
 <!-- JS that populates the table with the user's clothing items -->
@@ -213,12 +533,6 @@ $(document).ready(function(){
         
         return false;
     });
-
-
-
-// <tr> <td> <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button> </td> </tr>
-    //function that adds the edit buttons to the table
-
 </script>
 
 <div class="row vhm-60 m-0" >
@@ -266,7 +580,7 @@ $(document).ready(function(){
         <form method="post" action="/generate"class="text-center p-3">
             <h4 class="py-3">Recommend</h4>
             <h6 class="m-0">Temperature (°F)</h6>
-            <input type="text" id="temp-generate" name="temp" value="45" class="form-control text-center w-bg-color-1"> <!-- HARDCODED, need darksky --> 
+            <input type="text" id="temp-generate" name="temp" value="45" class="form-control text-center w-bg-color-1"> 
             <h6 class="m-0">Casual</h6>
             <select id="casual-generate" name="casual-generate" class="form-control w-bg-color-1">
                 <option value="True">Yes</option>

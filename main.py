@@ -304,6 +304,8 @@ def get_outfits():
     form = json.loads(request.data)
     isCasual = form['casual-generate']
     temp = int(form['temp-generate'])
+    # tags = (form['tags']).split(',')
+    tags = ['oUtfitTest']  #hard coded test
 
     # isCasual = 'True'
     includeJacket = True
@@ -338,20 +340,75 @@ def get_outfits():
         if includeJacket:
             for i in jackets:
                 if int(i['high_temp']) >= temp and int(i['low_temp']) <= temp and i['is_casual'] == isCasual:
-                    useableJacket.append(i)
+                    if len(tags) > 0:
+                        if 'tags' in i:
+                            new_set = i['tags'].split('</span>')
+                            tagSet = {x.replace('<span class="tag2">', '').lower() for x in new_set if x}
+                            found = False
+                            for y in tags:
+                                if (found):
+                                    break
+                                for z in tagSet:
+                                    if y.lower() == z:
+                                        found = True
+                                        useableJacket.append(i)
+                                        break
+                    else:
+                        useableJacket.append(i)
         if includeShirts:
             for i in shirts:
                 if int(i['high_temp']) >= temp and int(i['low_temp']) <= temp and i['is_casual'] == isCasual:
-                    useableShirts.append(i)
+                    if len(tags) > 0:
+                        if 'tags' in i:
+                            new_set = i['tags'].split('</span>')
+                            tagSet = {x.replace('<span class="tag2">', '').lower() for x in new_set if x}
+                            found = False
+                            for y in tags:
+                                if (found):
+                                    break
+                                for z in tagSet:
+                                    if y.lower() == z:
+                                        found = True
+                                        useableShirts.append(i)
+                                        break
+                    else:
+                        useableShirts.append(i)
         if includePants:
             for i in pants:
                 if int(i['high_temp']) >= temp and int(i['low_temp']) <= temp and i['is_casual'] == isCasual:
-                    useablePants.append(i)
-
+                    if len(tags) > 0:
+                        if 'tags' in i:
+                            new_set = i['tags'].split('</span>')
+                            tagSet = {x.replace('<span class="tag2">', '').lower() for x in new_set if x}
+                            found = False
+                            for y in tags:
+                                if (found):
+                                    break
+                                for z in tagSet:
+                                    if y.lower() == z:
+                                        found = True
+                                        useablePants.append(i)
+                                        break
+                    else:
+                        useablePants.append(i)
         if includeShoes:
             for i in shoes:
                 if int(i['high_temp']) >= temp and int(i['low_temp']) <= temp and i['is_casual'] == isCasual:
-                    useableShoes.append(i)
+                    if len(tags) > 0:
+                        if 'tags' in i:
+                            new_set = i['tags'].split('</span>')
+                            tagSet = {x.replace('<span class="tag2">', '').lower() for x in new_set if x}
+                            found = False
+                            for y in tags:
+                                if (found):
+                                    break
+                                for z in tagSet:
+                                    if y.lower() == z:
+                                        found = True
+                                        useableShoes.append(i)
+                                        break
+                    else:
+                        useableShoes.append(i)
 
         if(request.values['clothes'] == 'yes'):
             return json.dumps(useableJacket + useableShirts + useablePants + useableShoes)

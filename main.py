@@ -264,6 +264,27 @@ def add_item():
     return flask.redirect('/wardrobe')
 
 
+# method used to add to the wardrobe
+@app.route('/edit', methods=['POST'])
+def edit_item():
+    ident = flask.request.form.get('id')
+    typer = flask.request.form.get('type')
+    name = flask.request.form.get('name')
+    color = flask.request.form.get('color')
+    casual = flask.request.form.get('casual')
+    high = flask.request.form.get('high')
+    low = flask.request.form.get('low')
+    tags = flask.request.form.get('tags-input')
+
+    item = dataClasses.Clothing(typer, name, color, casual, high, low, tags)
+    print("Got ", item)
+    # Get the user's wardrobe from the table, create this clothing item, add it to the list, write to datastore
+    # is there a quick way to just add this onto the end of the existing array????
+    datastoreHelper.edit_item(get_user(), item, ident)
+
+    return flask.redirect('/wardrobe')
+
+
 # method to remove an item from the wardrobe
 @app.route('/remove', methods=['POST'])
 def remove_item():

@@ -196,6 +196,7 @@ My Current Wardrobe
                     <!-- Title -->
                     <h2 class="text-center w-color-1" align="center">Edit Item</h2>
                     
+                    <input type="hidden" name="id" id="hiddenID">
                     <!-- Clothing Type -->
                     <!-- is there a way to have the form change based on the type we select? - then the type doesnt need to be in the form and is just hardcoded -->
                     <div class="form-group">
@@ -472,16 +473,18 @@ $(document).ready(function(){
                 let modal = $(this);
 
                 //get the values of this row
-                let type = $(event.relatedTarget).closest('tr').find('td:eq( 1 )').html();
-                let name = $(event.relatedTarget).closest('tr').find('td:eq( 2 )').html();
-                let color = $(event.relatedTarget).closest('tr').find('td:eq( 3 )').html();
-                let casual = $(event.relatedTarget).closest('tr').find('td:eq( 4 )').html();
-                let high = $(event.relatedTarget).closest('tr').find('td:eq( 5 )').html();
-                let low = $(event.relatedTarget).closest('tr').find('td:eq( 6 )').html();
-                let tags = $(event.relatedTarget).closest('tr').find('td:eq( 7 )').html();
+                let id = $(event.relatedTarget).closest('tr').find('td:eq( 1 )').html();
+                let type = $(event.relatedTarget).closest('tr').find('td:eq( 2 )').html();
+                let name = $(event.relatedTarget).closest('tr').find('td:eq( 3 )').html();
+                let color = $(event.relatedTarget).closest('tr').find('td:eq( 4 )').html();
+                let casual = $(event.relatedTarget).closest('tr').find('td:eq( 5 )').html();
+                let high = $(event.relatedTarget).closest('tr').find('td:eq( 6 )').html();
+                let low = $(event.relatedTarget).closest('tr').find('td:eq( 7 )').html();
+                let tags = $(event.relatedTarget).closest('tr').find('td:eq( 8 )').html();
                 console.log("Got " + type + " " + name + " " + color + " " + casual + " " + high + " " + low + " " + tags );
 
                 //set modal values to matc
+                modal.find('.modal-body #hiddenId').val(id)
                 modal.find('.modal-body #etypesel').val(type)
                 modal.find('.modal-body #ename').val(name)
                 modal.find('.modal-body #ecolor').val(color)
@@ -554,7 +557,7 @@ $('#exampleModal').on('show.bs.modal', function (event) {
                 <thead>
                     <tr>
                         <th data-field="state" data-checkbox="true" >Remove</th>
-                        <th data-field="id" data-sortable="true" data-visible="false">ID</th>
+                        <th data-field="id" data-sortable="true">ID</th>
                         <th data-field="type" data-sortable="true">Type</th>
                         <th data-field="name" data-sortable="true">Name</th>
                         <th data-field="color" data-sortable="true">Color</th>

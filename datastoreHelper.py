@@ -98,6 +98,29 @@ def add_item(user, item):
         client.put(clothing)
 
 
+# Edit an item with its id
+def edit_item(user, item, id):
+    # get datastore client
+    client = get_client()
+
+    # idea is to use a transaction that either gets the entity or creates it if there is none
+    with client.transaction():
+        q = client.query(kind='Clothing')
+        q.add_filter('username', '=', user)
+
+        ent = None
+
+        for i in q.fetch():
+            if(str(i.id) == str(id)):
+                ent = i
+                break
+
+        ent.update({
+            'data': json.dumps(item, indent=4, cls=dataClasses.ClothingEncoder)
+        })
+        client.put(ent)
+
+
 # Get clothing type - looks at type string and returns an int for the type
 def get_clothing_type(type):
     if type == "Jacket":
@@ -130,6 +153,8 @@ def get_wardrobe(user):
         # now, how do we make this work on the frontend (and how to style this more?)
         button = '<button type="button" onclick="populateEdit()" data-toggle="modal" data-target="#editModal" class="btn btn-success">Edit</button>'
         map['editRow'] = button
+        # take unique id to table too for edit
+        map['id'] = item.id
         # puts in the tags as actual tags
         if "tags" in map:
             if map['tags'] != '':

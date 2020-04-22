@@ -196,8 +196,8 @@ def getLocation(latitude, longitude):
 @app.route('/coordinates', methods=['POST'])
 def getcoords():
     data = flask.request.get_json()
-    print(data['lat'] is not None)
-    print(data['lat'])
+    # print(data['lat'] is not None)
+    # print(data['lat'])
     latitude = 40.443864
     longitude = -79.955423
     if data['lat'] is not None and data['lon'] is not None:
@@ -259,7 +259,7 @@ def add_item():
     # return flask.Response(responseJson, mimetype='application/json')
 
     # print the information that they submitted
-    print(responseJson)
+    # print(responseJson)
     return flask.redirect('/wardrobe')
 
 

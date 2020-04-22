@@ -110,14 +110,17 @@ $(document).ready(function(){
         
         return false;
     });
+
+
+
+// <tr> <td> <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button> </td> </tr>
+    //function that adds the edit buttons to the table
+
 </script>
 
-<div class="row vhm-60 m-0">
+<div class="row vhm-60 m-0" >
     <div class="col-sm-3 w-bg-color-1 p-3 text-center flexbox">
         <h4>Wardrobe</h4>
-         <!--<p class="text-center p-3 m-0">Click <b>Add Item</b> to add a new article of clothing to your Wardrobe<br>
-        Check item(s) and click <b>Remove Item</b> to remove an article of clothing
-        </p>-->
         <div>
             <!-- Add Item opens a modal window with a form for creating a clothing item -->
             <button type="button" class="btn btn-primary my-3 w-70" data-toggle="modal" data-target="#myModal">Add Item</button>
@@ -141,10 +144,11 @@ $(document).ready(function(){
                         <th data-field="is_casual" data-sortable="true">Casual</th>
                         <th data-field="high_temp" data-sortable="true">High</th>
                         <th data-field="low_temp" data-sortable="true">Low</th>
+                        <th data-field="editRow" data-sortable="true">Edit Item</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    
                 </tbody>
             </table>
         </div>

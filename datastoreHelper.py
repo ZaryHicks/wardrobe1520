@@ -122,7 +122,11 @@ def get_wardrobe(user):
     # for each Clothing kind fetched, add its data string to an array
     for item in q.fetch():
         # add each item into the array as a Clothing item loaded from the JSON
-        items.append(json.loads(item['data']))
+        map = json.loads(item['data'])
+        # use magic to add a button to the json rows
+        # now, how do we make this work on the frontend (and how to style this more?)
+        map['editRow'] = '<button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>'
+        items.append(map)
 
     # then we turn the entire array into JSON and send it to the client
     array_json = json.dumps(items, indent=4, cls=dataClasses.ClothingEncoder)

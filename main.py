@@ -304,8 +304,10 @@ def get_outfits():
     form = json.loads(request.data)
     isCasual = form['casual-generate']
     temp = int(form['temp-generate'])
-    # tags = (form['tags']).split(',')
-    tags = ['oUtfitTest']  #hard coded test
+    t = form['tags']
+    tags = t.split(',')
+
+    print(tags)
 
     # isCasual = 'True'
     includeJacket = True

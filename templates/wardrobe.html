@@ -558,6 +558,7 @@ $('#exampleModal').on('show.bs.modal', function (event) {
                     <tr>
                         <th data-field="state" data-checkbox="true" >Remove</th>
                         <th data-field="id" data-sortable="true">ID</th>
+                        <th data-field="id5" data-sortable="true" data-visible="false">ID5</th>
                         <th data-field="type" data-sortable="true">Type</th>
                         <th data-field="name" data-sortable="true">Name</th>
                         <th data-field="color" data-sortable="true">Color</th>
@@ -580,7 +581,7 @@ $('#exampleModal').on('show.bs.modal', function (event) {
 <!-- Recommendations Section (Bootsrap JS Carousel Part of Options) -->
 <div class="row min-vh-100 m-0">
     <div class="form-generate col-sm-3 w-bg-color-1 p-0 flexbox">
-        <form method="post" action="/generate"class="text-center p-3">
+        <form method="post" action="/generate" class="text-center p-3">
             <h4 class="py-3">Recommend</h4>
             <h6 class="m-0">Temperature (°F)</h6>
             <input type="text" id="temp-generate" name="temp" value="45" class="form-control text-center w-bg-color-1"> 
@@ -589,6 +590,8 @@ $('#exampleModal').on('show.bs.modal', function (event) {
                 <option value="True">Yes</option>
                 <option value="False">No</option>
             </select>
+            <h6 class="m-0">Tags (separate with commas)</h6>
+            <input type="text" id="genTags" name="tags" class="form-control text-center">
             <input type="submit" value="Generate" class="btn btn-primary mt-3">
         </form>
     </div>
@@ -845,19 +848,19 @@ $('.form-generate form').submit(function(event){
         $('#table').bootstrapTable('checkAll')
         var rows = $('#table').bootstrapTable('getSelections')
         $.each(rows,function(index,element){
-            element.id = index
+            element.id5 = index
         })
         $('#table').bootstrapTable('uncheckAll')
 
         //gets the id of the table to remove
         var idss = []
         $.each(ids,function(index,element){
-             idss.push(element.id)
+             idss.push(element.id5)
         }) 
         
         //removes the table
         $table.bootstrapTable('remove', {
-        field: 'id',
+        field: 'id5',
         values: idss
         })
     })

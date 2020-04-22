@@ -7,6 +7,8 @@ import dataClasses
 # this is a helper class that main.py uses to handle calls to the datastore
 
 # gets the datastore client object
+
+
 def get_client():
     return datastore.Client()
 
@@ -87,7 +89,8 @@ def add_item(user, item):
         # item type specified with an int id (for query)
         clothing['type'] = get_clothing_type(item.type)
         # the Clothing object itself
-        clothing['data'] = json.dumps(item, indent=4, cls=dataClasses.ClothingEncoder)
+        clothing['data'] = json.dumps(
+            item, indent=4, cls=dataClasses.ClothingEncoder)
 
         # from our entity, decode json in clothing property # into an array of clothing items # items = json.loads(wardrobe['clothing'])
 
@@ -126,6 +129,14 @@ def get_wardrobe(user):
         # use magic to add a button to the json rows
         # now, how do we make this work on the frontend (and how to style this more?)
         map['editRow'] = '<button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>'
+        # puts in the tags as actual tags
+        if "tags" in map:
+            if map['tags'] != '':
+                str = map['tags'].split(',')
+                strin = ''
+                for item in str:
+                    strin = strin+'<span class="tag2">'+item+'</span>'
+                map['tags'] = strin
         items.append(map)
 
     # then we turn the entire array into JSON and send it to the client
@@ -133,12 +144,12 @@ def get_wardrobe(user):
     return array_json
 
 
-#deletes an item from the database
-def delete_item(user,data):
-    #get datastore client
+# deletes an item from the database
+def delete_item(user, data):
+    # get datastore client
     client = get_client()
 
-    #creates a query based on the data
+    # creates a query based on the data
     q = client.query(kind='Clothing')
     q.add_filter('username', '=', user)
 
@@ -147,8 +158,10 @@ def delete_item(user,data):
             del element['id']
         if 'state' in element:
             del element['state']
+        if 'editRow' in element:
+            del element['editRow']
         for item in q.fetch():
-            if json.loads(item['data'])==element:
+            if json.loads(item['data']) == element:
                 client.delete(item.key)
                 break
         q = client.query(kind='Clothing')

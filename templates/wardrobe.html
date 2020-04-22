@@ -72,7 +72,7 @@ My Current Wardrobe
                     <!-- Custom tags -->
                     <!-- Css for the tags -->
                     <style>
-                        .tags-input .tag {
+                        .tag {
                             padding: 0.5em 0.75em;
                             margin: 0.25em 0.1em;
                             display: inline-block;
@@ -81,12 +81,19 @@ My Current Wardrobe
                             cursor: pointer;
                         }
 
-                        .tags-input .tag:hover {
+                        .tag2 {
+                            padding: 0.5em 0.75em;
+                            margin: 0.25em 0.1em;
+                            display: inline-block;
+                            background-color: #ddd;
+                        }
+
+                        .tag:hover {
                             background-color: #3af;
                             color: white;
                         }
 
-                        .tags-input .tag .close::after {
+                        .tag .close::after {
                             content: '×';
                             font-weight: bold;
                             display: inline-block;
@@ -94,13 +101,13 @@ My Current Wardrobe
                             margin-left: 0.75em;
                         }
 
-                        .tags-input .tag .close:hover::after {
+                        .tag .close:hover::after {
                             color: red;
                         }
                     </style>
 
                     <div class="tags-input" data-name="tags-input" id="tagdiv" class="form-group">
-                        <label>Tags</label>
+                        <label class="w-color-1">Tags:</label>
                         <input type="hidden" name="tags-input" id="hid">
                         <input type="text" class="main-input" id="taginput" class="form-control">
                     </div>
@@ -249,6 +256,7 @@ $(document).ready(function(){
                         <th data-field="is_casual" data-sortable="true">Casual</th>
                         <th data-field="high_temp" data-sortable="true">High</th>
                         <th data-field="low_temp" data-sortable="true">Low</th>
+                        <th data-field="tags" data-sortable="true">Tags</th>
                         <th data-field="editRow" data-sortable="true">Edit Item</th>
                     </tr>
                 </thead>
@@ -514,7 +522,7 @@ $('.form-generate form').submit(function(event){
         var ids = $.map($table.bootstrapTable('getSelections'), function (row,$element) {
             return row
         })
-        console.log(ids)
+        
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",

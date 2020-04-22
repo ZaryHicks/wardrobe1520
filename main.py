@@ -238,8 +238,9 @@ def add_item():
     casual = flask.request.form.get('casual')
     high = flask.request.form.get('high')
     low = flask.request.form.get('low')
+    tags = flask.request.form.get('tags-input')
 
-    item = dataClasses.Clothing(typer, name, color, casual, high, low)
+    item = dataClasses.Clothing(typer, name, color, casual, high, low, tags)
 
     # Get the user's wardrobe from the table, create this clothing item, add it to the list, write to datastore
     # is there a quick way to just add this onto the end of the existing array????

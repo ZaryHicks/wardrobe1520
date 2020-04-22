@@ -580,7 +580,7 @@ $('#exampleModal').on('show.bs.modal', function (event) {
 <!-- Recommendations Section (Bootsrap JS Carousel Part of Options) -->
 <div class="row min-vh-100 m-0">
     <div class="form-generate col-sm-3 w-bg-color-1 p-0 flexbox">
-        <form method="post" action="/generate"class="text-center p-3">
+        <form method="post" action="/generate" class="text-center p-3">
             <h4 class="py-3">Recommend</h4>
             <h6 class="m-0">Temperature (°F)</h6>
             <input type="text" id="temp-generate" name="temp" value="45" class="form-control text-center w-bg-color-1"> 
@@ -589,6 +589,8 @@ $('#exampleModal').on('show.bs.modal', function (event) {
                 <option value="True">Yes</option>
                 <option value="False">No</option>
             </select>
+            <h6 class="m-0">Tags (separate with commas)</h6>
+            <input type="text" id="genTags" name="tags" class="form-control text-center">
             <input type="submit" value="Generate" class="btn btn-primary mt-3">
         </form>
     </div>

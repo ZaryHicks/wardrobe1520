@@ -69,6 +69,111 @@ My Current Wardrobe
                         <input type="number" name="low" class="form-control" id="low" required>
                     </div>
 
+                    <!-- Custom tags -->
+                    <!-- Css for the tags -->
+                    <style>
+                        .tags-input .tag {
+                            padding: 0.5em 0.75em;
+                            margin: 0.25em 0.1em;
+                            display: inline-block;
+                            background-color: #ddd;
+                            transition: all 0.1s linear;
+                            cursor: pointer;
+                        }
+
+                        .tags-input .tag:hover {
+                            background-color: #3af;
+                            color: white;
+                        }
+
+                        .tags-input .tag .close::after {
+                            content: '×';
+                            font-weight: bold;
+                            display: inline-block;
+                            transform: scale(1.4);
+                            margin-left: 0.75em;
+                        }
+
+                        .tags-input .tag .close:hover::after {
+                            color: red;
+                        }
+                    </style>
+
+                    <div class="tags-input" data-name="tags-input" id="tagdiv" class="form-group">
+                        <label>Tags</label>
+                        <input type="hidden" name="tags-input" id="hid">
+                        <input type="text" class="main-input" id="taginput" class="form-control">
+                    </div>
+
+                    <!-- script for the tags -->
+                    <script>
+                        function start(){
+                            tags = [];
+                            var space = document.getElementById('tagdiv');
+                            var hid = document.getElementById('hid');
+                            var inp = document.getElementById('taginput');
+
+                            //adds the tag when user types space
+                            inp.addEventListener('input',function(){
+                                var entered = inp.value.split(' ');
+                                if(entered.length > 1){
+                                    entered.forEach(function(tag){
+                                        if(tag.length>0){
+                                            addTag(tag);
+                                        }
+                                    });
+                                    inp.value = '';
+                                }
+                            });
+                            
+                            //deletes last tag when user presses backspace
+                            inp.addEventListener('keydown',function(key){
+                                var keyCode = key.which||key.keyCode;
+                                if (keyCode===8&&inp.value.length===0&&tags.length>0) {
+                                    removeTag(tags.length - 1);
+                                }
+                            });
+
+                            //adds the tag
+                            function addTag(text){
+                                var tag = {
+                                    text: text,
+                                    element: document.createElement('span'),
+                                };
+                                tag.element.classList.add('tag');
+                                tag.element.textContent = tag.text;
+                                var close = document.createElement('span');
+                                close.classList.add('close');
+                                close.addEventListener('click', function(){
+                                    removeTag(tags.indexOf(tag));
+                                });
+                                tag.element.appendChild(close);
+
+                                tags.push(tag);
+                                space.insertBefore(tag.element,inp);
+                                refreshTags()
+                            }
+
+                            //removes tags
+                            function removeTag(i){
+                                var tag = tags[i];
+                                tags.splice(i,1);
+                                space.removeChild(tag.element);
+                                refreshTags();
+                            }
+
+                            //refreshes tags
+                            function refreshTags(){
+                                let tagsList = [];
+                                tags.forEach(function (t) {
+                                    tagsList.push(t.text);
+                                });
+                                hid.value = tagsList.join(',');
+                            }
+                        }
+                        start();
+                    </script>
+
                     <!-- Div for errors -->
                     <div id="validater"></div>
 
@@ -458,12 +563,8 @@ function addClothes(){
     var high = document.getElementById("high").value;
     var low = document.getElementById("low").value;
     var items = document.getElementsByClassName("form-control");
-    for(var i=0;i<items.length;i++){
-		if(!(items[i]&&items[i].value)){
-            text.innerHTML = "Please enter all fields";
-            return false;
-        }
-	}
+    var tags = document.getElementById("hid").value;
+    
     if(parseInt(high)<low){
         text.innerHTML = "Please enter a higher temperature for your high temperature";
         return false;

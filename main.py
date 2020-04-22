@@ -306,9 +306,9 @@ def get_outfits():
     temp = int(form['temp-generate'])
     t = form['tags']
     tags = t.split(',')
-
-    print(tags)
-
+    for g in tags:
+        if g == '':
+            tags.remove(g)
     # isCasual = 'True'
     includeJacket = True
     includeShirts = True

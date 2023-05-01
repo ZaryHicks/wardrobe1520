@@ -1,4 +1,4 @@
-Flask==1.0.2
+Flask==2.3.2
 google-cloud-datastore==1.7.3
 darksky_weather==1.8.0
 googlemaps==4.2.0
